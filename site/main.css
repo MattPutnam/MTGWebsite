@@ -58,6 +58,10 @@ body {
     height: auto;
 }
 
+section.summary {
+    max-width: 1000px;
+}
+
 .performance_dates {
     font-weight: 600;
 }
