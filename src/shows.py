@@ -2,7 +2,7 @@ import re
 from os import listdir, path
 
 import utils
-from utils import load_or_die, root, render_page, write
+from utils import load_or_die, root, render_template, write
 
 show_template = load_or_die('templates', 'show.htmpl')
 summary_template = load_or_die('templates', 'summary.htmpl')
@@ -50,10 +50,10 @@ def make_show_page(year, season, is_current, is_future, show_list):
     if banner:
         show_data['banner'] = banner
 
-    rendered = render_page(show_template, context='show', show_data=show_data)
+    rendered = render_template(show_template, context='show', show_data=show_data)
     write('MTG - ' + show_data['Title'] + ' (' + year + ")",
           rendered,
           'show',
           'site', year, season, 'show.html')
 
-    show_list.append(render_page(summary_template, context='main', show_data=show_data))
+    show_list.append(render_template(summary_template, context='main', show_data=show_data))

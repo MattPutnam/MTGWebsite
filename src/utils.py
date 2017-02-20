@@ -31,7 +31,7 @@ def load_or_die(*paths):
 token_pattern = "\{\{.+?\}\}"
 
 
-def render_page(template, context, show_data={}, local_data={}):
+def render_template(template, context, show_data={}, local_data={}):
     page = template
     for token in re.findall(token_pattern, template):
         page = page.replace(token, resolve_token(token, context, show_data, local_data))
@@ -113,16 +113,16 @@ def resolve_foreach(source, content):
     return "".join(map(lambda item: content.replace('$loopvar', item), source))
 
 
+venue_template = load_or_die('templates', 'venue.htmpl')
+venue_data = load_or_die('site', 'venues.yaml')
+
+
 def make_performance_section(dates, venue):
-    doc, tag, text = Doc().tagtext()
-
-    text('Performances ')
-    with tag('span', klass='performance_dates'):
-        text(dates)
-    text(' in ')
-    doc.asis(make_venue_link(venue))
-
-    return doc.getvalue()
+    venue_info = venue_data.get(venue, {})
+    local_data = {'dates': dates,
+                  'href': venue_info.get('Location'),
+                  'text': venue_info.get('Full Name')}
+    return render_template(venue_template, 'any', local_data=local_data)
 
 
 page_template = load_or_die('templates', 'page.htmpl')
@@ -137,30 +137,11 @@ def write(title, content, context, *paths):
 
     local_data = {'title': title, 'content': content, 'css_files': css_files}
 
-    page = render_page(page_template, context=context, local_data=local_data)
+    page = render_template(page_template, context=context, local_data=local_data)
 
     file = open(filename, "w")
     file.write(indent(page))
     file.close()
-
-
-def make_venue_link(venue):
-    venue = venue.lower()
-    if venue == 'klt':
-        venue_text = 'Kresge Little Theater'
-        venue_href = 'http://whereis.mit.edu/?go=W16'
-    elif venue == 'sala':
-        venue_text = 'La Sala de Puerto Rico'
-        venue_href = 'http://whereis.mit.edu/?go=W20'
-    else:
-        raise ValueError("Unknown venue: {}", venue)
-
-    doc, tag, text, line = Doc().ttl()
-
-    with tag('a', href=venue_href, klass='venue_link', target='_blank'):
-        text(venue_text)
-
-    return doc.getvalue()
 
 
 def find_show_file(name):

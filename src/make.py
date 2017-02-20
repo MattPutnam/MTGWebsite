@@ -1,6 +1,6 @@
 import shows
 import utils
-from utils import load_or_die, render_page, write
+from utils import load_or_die, render_template, write
 
 
 def main():
@@ -13,16 +13,18 @@ def main():
     render_about()
     shows.render_shows()
 
+    print("Success!")
+
 
 def render_about():
     about_template = load_or_die('templates', 'about.htmpl')
-    rendered = render_page(about_template, context='main')
+    rendered = render_template(about_template, context='main')
     write('MTG - About MTG', rendered, 'main', 'site', 'about.html')
 
 
 def render_index():
     index_template = load_or_die('templates', 'index.htmpl')
-    rendered = render_page(index_template, context='main')
+    rendered = render_template(index_template, context='main')
     file = open('../site/index.html', 'w')
     file.write(rendered)
     file.close()
