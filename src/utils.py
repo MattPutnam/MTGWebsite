@@ -96,12 +96,7 @@ def resolve_banner(filename):
 
 def resolve_img(filename):
     file = find_show_file(filename)
-    if file:
-        doc, tag, text = Doc().tagtext()
-        doc.stag('img', src=file)
-        return doc.getvalue()
-    else:
-        return ""
+    return '<img src="' + file + '" />' if file else ""
 
 
 def resolve_resource(file, context):
