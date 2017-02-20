@@ -1,7 +1,7 @@
 import shows
 import utils
 from utils import load_or_die, render_page, write
-from yattag import Doc
+from yattag import Doc, indent
 
 
 def main():
@@ -22,12 +22,14 @@ def render_about(main_data):
 def render_index():
     year, season = utils.current_show
     doc, tag, text = Doc().tagtext()
+    doc.asis('<!-- This file has been automatically generated -->')
+    doc.asis('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">')
     with tag('html'):
         with tag('head'):
             doc.stag('meta', ('http-equiv', 'refresh'), content="0; url='" + year + "/" + season + "/show.html'")
 
     file = open('../site/index.html', 'w')
-    file.write(doc.getvalue())
+    file.write(indent(doc.getvalue()))
     file.close()
 
 
