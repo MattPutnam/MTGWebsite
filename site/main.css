@@ -28,13 +28,13 @@ body {
     text-decoration: underline;
 }
 
-#header .mtglogo {
+.mtglogo {
     width: 118px;
     height: 60px;
     margin-right: 1rem;
 }
 
-#header .mitlogo {
+.mitlogo {
     height: 36px;
     width: auto;
 }
