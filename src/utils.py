@@ -29,27 +29,27 @@ def load_or_die(*paths):
 token_pattern = "\{\{.+?\}\}"
 
 
-def render_page(template, main_data, show_data):
+def render_page(template, context, main_data={}, show_data={}, local_data={}):
     page = template
     for token in re.findall(token_pattern, template):
-        page = page.replace(token, resolve_token(token, main_data, show_data))
+        page = page.replace(token, resolve_token(token, context, main_data, show_data, local_data))
     return page
 
 
-def resolve_token(token, main_data, show_data):
+def resolve_token(token, context, main_data, show_data, local_data):
     colon_split = trim_all(token[2:-2].split(":"))
     if len(colon_split) == 1:
-        return resolve_variable(colon_split[0], main_data, show_data)
+        return resolve_variable(colon_split[0], main_data, show_data, local_data)
     elif len(colon_split) == 2:
         component, variables = colon_split
         data = {}
         for var_entry in trim_all(variables.split(",")):
-            var, value = trim_all(var_entry.split("="))
-            data[var] = resolve_variable(value, main_data, show_data)
-        return resolve_component(component, data)
+            var, value = trim_all(var_entry.split("=", 1))
+            data[var] = resolve_variable(value, main_data, show_data, local_data)
+        return resolve_component(component, data, context)
 
 
-def resolve_variable(variable, main_data, show_data):
+def resolve_variable(variable, main_data, show_data, local_data):
     if variable[0] != '$':
         return variable
 
@@ -58,11 +58,13 @@ def resolve_variable(variable, main_data, show_data):
         return main_data.get(name, '')
     elif namespace == 'show':
         return show_data.get(name, '')
+    elif namespace == 'local':
+        return local_data.get(name, '')
     else:
         raise ValueError("Exception: Unknown variable namespace '{}'", namespace)
 
 
-def resolve_component(component, data):
+def resolve_component(component, data, context):
     if component == 'table':
         return table.make_table(header=data['header'], content=data['content'])
     elif component == 'performances':
@@ -71,6 +73,10 @@ def resolve_component(component, data):
         return resolve_banner(data['filename'])
     elif component == 'img':
         return resolve_img(data['filename'])
+    elif component == 'resource':
+        return resolve_resource(data['file'], context)
+    elif component == 'foreach':
+        return resolve_foreach(data['source'], data['content'])
     else:
         raise ValueError('Error: Unknown component "{}"', component)
 
@@ -96,6 +102,15 @@ def resolve_img(filename):
         return ""
 
 
+def resolve_resource(file, context):
+    prefix = '../../' if context == 'show' else ''
+    return prefix + file
+
+
+def resolve_foreach(source, content):
+    return "".join(map(lambda item: content.replace('$loopvar', item), source))
+
+
 def make_performance_section(dates, venue):
     doc, tag, text = Doc().tagtext()
 
@@ -108,62 +123,24 @@ def make_performance_section(dates, venue):
     return doc.getvalue()
 
 
-def write(title, content, *paths):
+page_template = load_or_die('templates', 'page.htmpl')
+
+
+def write(title, content, context, *paths):
     filename = path.join(root, *paths)
     dir_name = path.dirname(filename)
     css_files = [f for f in listdir(dir_name) if fnmatch(f, '*.css')]
-    is_show = paths[-1] == 'show.html'
-    if is_show:
+    if context == 'show':
         css_files.append('../../main.css')
 
-    doc, tag, text, line = Doc().ttl()
-    doc.asis('<!-- This file has been automatically generated -->')
-    doc.asis('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">')
-    with tag('html'):
-        doc.asis(make_head(title, css_files))
-        with tag('body'):
-            doc.asis(make_header(is_show))
-            with tag('div', klass='page'):
-                doc.asis(content)
+    local_data = {'title': title, 'content': content, 'css_files': css_files,
+                  'current_show': '/'.join(current_show) + '/show.html'}
+
+    page = render_page(page_template, context=context, local_data=local_data)
 
     file = open(filename, "w")
-    file.write(indent(doc.getvalue()))
+    file.write(indent(page))
     file.close()
-
-
-def make_head(title, css_files):
-    doc, tag, text, line = Doc().ttl()
-    with tag('head'):
-        doc.stag('meta', ('http-equiv', 'Content-Type'), content='text/html; charset=UTF-8')
-        doc.stag('meta', name='description', content='The non-profit, student-run MIT Musical Theatre Guild is the oldest and largest theatre organization at MIT.')
-        for css_file in css_files:
-            doc.stag('link', type='text/css', href=css_file, rel='stylesheet')
-        doc.stag('link', type='image/png', href='images/mtg-16.png', rel='icon')
-        with tag('title'):
-            text(title)
-
-    return doc.getvalue()
-
-
-def make_header(is_show):
-    prefix = '../../' if is_show else ''
-
-    doc, tag, text, line = Doc().ttl()
-    with tag('div', id='header'):
-        doc.stag('img', alt='MTG', klass='mtglogo', src=prefix+'images/mtg-bg.png')
-        with tag('span', klass='links'):
-            with tag('a', href=prefix + '/'.join(current_show) + '/show.html'):
-                text('Current Show')
-            with tag('a', href=prefix+'show_list.html'):
-                text('Show List')
-            with tag('a', href=prefix+'about.html'):
-                text('About MTG')
-            with tag('a', href=prefix+'contact.html'):
-                text('Contact Us')
-            with tag('a', href='http://web.mit.edu/'):
-                doc.stag('img', alt='MIT', klass='mitlogo', src=prefix+'images/MIT_logo.svg')
-
-    return doc.getvalue()
 
 
 def make_venue_link(venue):

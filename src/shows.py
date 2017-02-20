@@ -26,7 +26,7 @@ def render_shows():
             if path.isdir(utils.cur_path):
                 make_show_page(year, season, is_current, is_future, show_list)
 
-    write('MTG - Show List', "".join(show_list), 'site', 'show_list.html')
+    write('MTG - Show List', "".join(show_list), 'main', 'site', 'show_list.html')
 
 
 def make_show_page(year, season, is_current, is_future, show_list):
@@ -50,7 +50,10 @@ def make_show_page(year, season, is_current, is_future, show_list):
     if banner:
         show_data['banner'] = banner
 
-    rendered = render_page(show_template, {}, show_data)
-    write('MTG - ' + show_data['Title'] + ' (' + year + ")", rendered, 'site', year, season, 'show.html')
+    rendered = render_page(show_template, context='show', show_data=show_data)
+    write('MTG - ' + show_data['Title'] + ' (' + year + ")",
+          rendered,
+          'show',
+          'site', year, season, 'show.html')
 
-    show_list.append(render_page(summary_template, {}, show_data))
+    show_list.append(render_page(summary_template, context='main', show_data=show_data))
