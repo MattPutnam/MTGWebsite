@@ -1,0 +1,27 @@
+Title: <show title>
+Credits: |
+  <credits line 1>
+  <credits line 2>
+  <etc>
+Summary: >
+  <summary text
+  that wraps>
+Venue: <Sala|KLT>
+Performance Dates: <performance dates, as text>
+
+#Production Staff:
+# - Producers:
+#    - Gary Kurtz
+#    - George Lucas
+#    - Rick McCallum
+# - Director: George Lucas
+# - Music Director: John Williams
+# etc.
+
+#Cast:
+# - Luke Skywalker : Mark Hamill
+# - Han Solo : Harrison Ford
+# - Princess Leia Organa : Carrie Fisher
+# etc.
+
+#and same for orchestra

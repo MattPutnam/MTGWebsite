@@ -1,0 +1,22 @@
+<h1>About MTG</h1>
+
+<p id="about_summary">
+    The MIT Musical Theatre Guild is the oldest and largest theatre organization at MIT, and we are entirely
+    student-run! Formed from the merger of the MIT Gilbert and Sullivan Society, the Classical Musical Society, and the
+    Tech Show Society in 1971, we produce a wide variety of Musical Theatre. We perform four shows a year so there is
+    plenty of opportunity to act, sing, dance, tech, design, direct, and produce. So, if you want to be part of a great
+    art form, come investigate MTG!
+</p>
+<p id="faq_link">
+    <a href="FAQ.html">Frequently Asked Questions</a> about the Guild.
+</p>
+<p id="useful_info_link">
+    <a href="Useful-Info.html">More useful Guild information</a>
+</p>
+<p id="general_inquiries_link">
+    With general inquiries, please contact <a href="mailto:mtg-board@mit.edu">the managing board</a>.
+</p>
+<div id="board_table_container">
+    {{table:header=MTG Officers, content=$main/Managing Board}}
+    {{table:header=Appointed Positions, content=$main/Appointed Positions}}
+</div>

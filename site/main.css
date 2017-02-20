@@ -1,0 +1,178 @@
+html {
+    height: 100%;
+}
+
+body {
+    font-family: Arial;
+    background-color: #ccc;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+}
+
+#header {
+    background-color: #ffcc99;
+    padding: .7rem;
+    border-bottom: 4px solid black;
+}
+
+#header a {
+    color: #555;
+    font-weight: bold;
+    margin: 0 0.5rem;
+    text-decoration: none;
+}
+
+#header a:hover {
+    text-decoration: underline;
+}
+
+#header .mtglogo {
+    width: 118px;
+    height: 60px;
+    vertical-align: bottom;
+    margin-right: 1rem;
+}
+
+.page {
+    padding: 0 1rem;
+    background-color: white;
+    flex: 1 1 auto;
+}
+
+.show_banner {
+    padding: 0;
+    border: none;
+    margin: 0 -1rem;
+    background-color: black;
+}
+
+.show_banner > img {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+}
+
+.performance_dates {
+    font-weight: 600;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 1rem;
+}
+
+td {
+    padding: 0.5rem 0.5rem 0;
+    min-width: 150px;
+    max-width: 225px;
+    vertical-align: top;
+}
+
+td.role {
+    text-align: right;
+}
+
+td.name {
+    font-weight: 600;
+}
+
+td.name > a {
+    text-decoration: none;
+    color: black;
+}
+
+td.name > a:hover {
+    color: #993333;
+    text-decoration: underline;
+}
+
+th {
+    text-align: center;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid black;
+}
+
+#board_table_container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+#show_header {
+    margin-top: 1rem;
+    display: flex;
+    align-items: flex-start;
+}
+
+#show_header > img {
+    margin-right: 1rem;
+}
+
+h1.title {
+    margin-top: 0;
+}
+
+section {
+    margin: 1rem 0;
+}
+
+section.credits {
+    font-weight: 600;
+    white-space: pre-wrap;
+}
+
+div#personnel {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.show_summary {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid black;
+}
+
+.summary_graphic >img {
+    width: 130px;
+    height: auto;
+    margin-right: 1rem;
+}
+
+.summary_slot {
+    margin-bottom: 0.5rem;
+    color: #555;
+}
+
+.summary_title {
+    text-decoration: none;
+    color: #993333;
+    font-size: 150%;
+}
+
+.summary_credits {
+    white-space: pre-wrap;
+    margin: 0.7rem 0 1rem;
+}
+
+.summary_dates {
+    font-weight: bold;
+}
+
+.summary_venue {
+    margin-top: 0.5rem;
+    font-size: 90%;
+}
+
+.summary_venue > a {
+    text-decoration: none;
+    color: black;
+}
+
+.summary_venue > a:hover {
+    color: #993333;
+    text-decoration: underline;
+}
