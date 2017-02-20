@@ -1,0 +1,3 @@
+<div class="show_banner" align="middle">
+    <img src="{{$local/file}}" />
+</div>

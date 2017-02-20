@@ -1,5 +1,5 @@
 from os import path, listdir
-from yattag import Doc, indent
+from yattag import indent
 import yaml
 import re
 import table
@@ -83,15 +83,12 @@ def resolve_component(component, data, context):
         raise ValueError('Error: Unknown component "{}"', component)
 
 
+banner_template = load_or_die('templates', 'banner.htmpl')
+
+
 def resolve_banner(filename):
     file = find_show_file(filename)
-    if file:
-        doc, tag, text = Doc().tagtext()
-        with tag('div', klass='show_banner', align='middle'):
-            doc.stag('img', src=file)
-        return doc.getvalue()
-    else:
-        return ""
+    return render_template(banner_template, 'any', local_data={'file': file}) if file else ""
 
 
 def resolve_img(filename):
