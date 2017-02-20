@@ -1,0 +1,12 @@
+<div id="header">
+    <img alt="MTG" class="mtglogo" src="{{resource:file=images/mtg-bg.png}}" />
+    <span class="links">
+        <a href="{{resource:file=show_list.html}}">Current Show</a>
+        <a href="{{resource:file=show_list.html}}">Show List</a>
+        <a href="{{resource:file=about.html}}">About MTG</a>
+        <a href="{{resource:file=contact.html}}">Contact Us</a>
+        <a href="http://web.mit.edu/">
+            <img alt="MIT" class="mitlogo" src="{{resource:filename=images/MIT_logo.svg}}" />
+        </a>
+    </span>
+</div>

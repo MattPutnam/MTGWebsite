@@ -31,8 +31,12 @@ body {
 #header .mtglogo {
     width: 118px;
     height: 60px;
-    vertical-align: bottom;
     margin-right: 1rem;
+}
+
+#header .mitlogo {
+    height: 36px;
+    width: auto;
 }
 
 .page {

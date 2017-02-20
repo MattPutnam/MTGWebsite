@@ -26,7 +26,7 @@ def load_or_die(*paths):
         return file.read()
 
 
-token_pattern = "\{\{.+\}\}"
+token_pattern = "\{\{.+?\}\}"
 
 
 def render_page(template, main_data, show_data):
@@ -150,7 +150,7 @@ def make_header(is_show):
 
     doc, tag, text, line = Doc().ttl()
     with tag('div', id='header'):
-        doc.stag('img', alt='MTG', klass='mtglogo', src=prefix+'images/mtg-bg.gif')
+        doc.stag('img', alt='MTG', klass='mtglogo', src=prefix+'images/mtg-bg.png')
         with tag('span', klass='links'):
             with tag('a', href=prefix + '/'.join(current_show) + '/show.html'):
                 text('Current Show')
@@ -161,7 +161,7 @@ def make_header(is_show):
             with tag('a', href=prefix+'contact.html'):
                 text('Contact Us')
             with tag('a', href='http://web.mit.edu/'):
-                doc.stag('img', alt='MIT', klass='mitlogo', src=prefix+'images/mit-redgrey-header.png')
+                doc.stag('img', alt='MIT', klass='mitlogo', src=prefix+'images/MIT_logo.svg')
 
     return doc.getvalue()
 
