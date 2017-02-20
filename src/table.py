@@ -16,14 +16,7 @@ def make_table(header, content):
                     text(header)
 
         with tag('tbody'):
-            for row in content:
-                if type(row) is not dict:
-                    raise ValueError("Row must be a dictionary: " + row)
-                if len(list(row)) is not 1:
-                    raise ValueError("Row must have only one entry: " + row)
-
-                role = list(row)[0]
-                val = row[role]
+            for role, val in content.items():
                 val_type = type(val)
 
                 with tag('tr'):

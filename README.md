@@ -36,9 +36,9 @@ Modify `main.yaml`.
 Todos:
 
 * Support production photos
+* General announcements for current show page
 * Do something for reservations, probably a switch in `main.yaml` that creates a link to our existing system
 * Decouple HTML from Python.  Goal is to have an engine where all modifications can be done by tweaking htmpl files and
-adding yaml and custom CSS.
+adding yaml and custom CSS.  **Update**: complete except for tables.
 * Link people across shows like the G&S website?
 * Add hook to automatically run `make.py`.
-* Get ordered map working so we can further simplify YAML files.
