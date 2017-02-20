@@ -8,9 +8,9 @@ import table
 
 main_data = {}
 
-current_show = ""
+current_show = ''
 root = path.dirname(path.dirname(path.abspath(__file__)))
-cur_path = ""
+cur_path = ''
 
 
 def load_or_die(*paths):
@@ -28,12 +28,12 @@ def load_or_die(*paths):
         return file.read()
 
 
-token_pattern = "\{\{.+?\}\}"
+token_pattern = '\{\{.+?\}\}'
 
 
-def render_template(template, context, show_data={}, local_data={}):
+def render_template(template, context='any', show_data=None, local_data=None):
     page = template
-    for token in re.findall(token_pattern, template):
+    for token in re.findall(token_pattern, template, re.DOTALL):
         page = page.replace(token, resolve_token(token, context, show_data, local_data))
     return page
 
@@ -45,8 +45,8 @@ def resolve_token(token, context, show_data, local_data):
     elif len(colon_split) == 2:
         component, variables = colon_split
         data = {}
-        for var_entry in trim_all(variables.split(",")):
-            var, value = trim_all(var_entry.split("=", 1))
+        for var_entry in trim_all(variables.split(',')):
+            var, value = trim_all(var_entry.split('=', 1))
             data[var] = resolve_variable(value, show_data, local_data)
         return resolve_component(component, data, context)
 
@@ -55,7 +55,7 @@ def resolve_variable(variable, show_data, local_data):
     if variable[0] != '$':
         return variable
 
-    namespace, name = variable[1:].split("/")
+    namespace, name = variable[1:].split('/')
     if namespace == 'main':
         return main_data.get(name, '')
     elif namespace == 'show':
@@ -88,7 +88,7 @@ banner_template = load_or_die('templates', 'banner.htmpl')
 
 def resolve_banner(filename):
     file = find_show_file(filename)
-    return render_template(banner_template, 'any', local_data={'file': file}) if file else ""
+    return render_template(banner_template, local_data={'file': file}) if file else ""
 
 
 def resolve_img(filename):
@@ -102,7 +102,7 @@ def resolve_resource(file, context):
 
 
 def resolve_foreach(source, content):
-    return "".join(map(lambda item: content.replace('$loopvar', item), source))
+    return ''.join(map(lambda item: content.replace('$loopvar', item), source))
 
 
 venue_template = load_or_die('templates', 'venue.htmpl')
@@ -114,7 +114,7 @@ def make_performance_section(dates, venue):
     local_data = {'dates': dates,
                   'href': venue_info.get('Location'),
                   'text': venue_info.get('Full Name')}
-    return render_template(venue_template, 'any', local_data=local_data)
+    return render_template(venue_template, local_data=local_data)
 
 
 page_template = load_or_die('templates', 'page.htmpl')
@@ -131,7 +131,7 @@ def write(title, content, context, *paths):
 
     page = render_template(page_template, context=context, local_data=local_data)
 
-    file = open(filename, "w")
+    file = open(filename, 'w')
     file.write(page)
     file.close()
 
