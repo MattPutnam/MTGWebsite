@@ -5,23 +5,24 @@ from utils import load_or_die, render_page, write
 
 def main():
     main_data = load_or_die('site', 'main.yaml')
-    utils.current_show = main_data['Current Show'].split('/')
+    main_data['current_show_page'] = main_data['Current Show'] + '/show.html'
+    utils.main_data = main_data
+    utils.current_show_tokens = main_data['Current Show'].split('/')
 
-    render_index(main_data)
-    render_about(main_data)
+    render_index()
+    render_about()
     shows.render_shows()
 
 
-def render_about(main_data):
+def render_about():
     about_template = load_or_die('templates', 'about.htmpl')
-    rendered = render_page(about_template, context='main', main_data=main_data)
+    rendered = render_page(about_template, context='main')
     write('MTG - About MTG', rendered, 'main', 'site', 'about.html')
 
 
-def render_index(main_data):
+def render_index():
     index_template = load_or_die('templates', 'index.htmpl')
-    rendered = render_page(index_template, context='main',
-                           local_data={'current_show': main_data['Current Show'] + "/show.html"})
+    rendered = render_page(index_template, context='main')
     file = open('../site/index.html', 'w')
     file.write(rendered)
     file.close()

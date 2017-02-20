@@ -6,6 +6,8 @@ import table
 from fnmatch import fnmatch
 
 
+main_data = {}
+
 current_show = ""
 root = path.dirname(path.dirname(path.abspath(__file__)))
 cur_path = ""
@@ -29,27 +31,27 @@ def load_or_die(*paths):
 token_pattern = "\{\{.+?\}\}"
 
 
-def render_page(template, context, main_data={}, show_data={}, local_data={}):
+def render_page(template, context, show_data={}, local_data={}):
     page = template
     for token in re.findall(token_pattern, template):
-        page = page.replace(token, resolve_token(token, context, main_data, show_data, local_data))
+        page = page.replace(token, resolve_token(token, context, show_data, local_data))
     return page
 
 
-def resolve_token(token, context, main_data, show_data, local_data):
+def resolve_token(token, context, show_data, local_data):
     colon_split = trim_all(token[2:-2].split(":"))
     if len(colon_split) == 1:
-        return resolve_variable(colon_split[0], main_data, show_data, local_data)
+        return resolve_variable(colon_split[0], show_data, local_data)
     elif len(colon_split) == 2:
         component, variables = colon_split
         data = {}
         for var_entry in trim_all(variables.split(",")):
             var, value = trim_all(var_entry.split("=", 1))
-            data[var] = resolve_variable(value, main_data, show_data, local_data)
+            data[var] = resolve_variable(value, show_data, local_data)
         return resolve_component(component, data, context)
 
 
-def resolve_variable(variable, main_data, show_data, local_data):
+def resolve_variable(variable, show_data, local_data):
     if variable[0] != '$':
         return variable
 
@@ -133,8 +135,7 @@ def write(title, content, context, *paths):
     if context == 'show':
         css_files.append('../../main.css')
 
-    local_data = {'title': title, 'content': content, 'css_files': css_files,
-                  'current_show': '/'.join(current_show) + '/show.html'}
+    local_data = {'title': title, 'content': content, 'css_files': css_files}
 
     page = render_page(page_template, context=context, local_data=local_data)
 

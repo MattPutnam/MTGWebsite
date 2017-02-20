@@ -18,7 +18,7 @@ def render_shows():
 
     for year in reversed(years):
         for season in reversed(seasons):
-            is_current = [year, season] == utils.current_show
+            is_current = [year, season] == utils.current_show_tokens
             if is_current:
                 is_future = False
 
