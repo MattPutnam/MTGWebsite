@@ -1,10 +1,10 @@
-from os import path, listdir
-from yattag import indent
-import yaml
 import re
-import table
 from fnmatch import fnmatch
+from os import path, listdir
 
+import yaml
+
+import table
 
 main_data = {}
 
@@ -132,7 +132,7 @@ def write(title, content, context, *paths):
     page = render_template(page_template, context=context, local_data=local_data)
 
     file = open(filename, "w")
-    file.write(indent(page))
+    file.write(page)
     file.close()
 
 

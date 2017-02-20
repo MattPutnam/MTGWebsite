@@ -1,6 +1,6 @@
 import re
 
-from yattag import Doc
+from yattag import Doc, indent
 
 
 def make_table(header, content):
@@ -38,7 +38,7 @@ def make_table(header, content):
                         else:
                             raise ValueError("Exception: table entry {} has unknown value of type {}", role, val_type)
 
-    return doc.getvalue()
+    return indent(doc.getvalue())
 
 
 def render_with_email(s, tag, text):
