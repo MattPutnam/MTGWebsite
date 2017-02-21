@@ -58,11 +58,11 @@ body {
     height: auto;
 }
 
-section.summary {
+#summary {
     max-width: 1000px;
 }
 
-.performance_dates {
+#performance_dates {
     font-weight: 600;
 }
 
@@ -102,7 +102,7 @@ th {
     border-bottom: 1px solid black;
 }
 
-#board_table_container {
+.table_container {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
@@ -129,12 +129,6 @@ section {
 section.credits {
     font-weight: 600;
     white-space: pre-wrap;
-}
-
-div#personnel {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
 }
 
 .show_summary {

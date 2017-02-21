@@ -16,7 +16,7 @@
 <p id="general_inquiries_link">
     With general inquiries, please contact <a href="mailto:mtg-board@mit.edu">the managing board</a>.
 </p>
-<div id="board_table_container">
+<div id="board_personnel" class="table_container">
     {{table:header=MTG Officers, content=$main/Managing Board}}
     {{table:header=Appointed Positions, content=$main/Appointed Positions}}
 </div>
