@@ -5,6 +5,8 @@ from utils import load_or_die, render_template, write
 import yaml
 import collections
 
+import parser
+
 
 # Setup yaml importer to use OrderedDict
 _mapping_tag = yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG
@@ -42,7 +44,7 @@ def render_about():
 
 def render_index():
     index_template = load_or_die('templates', 'index.htmpl')
-    rendered = render_template(index_template, context='main')
+    rendered = parser.Parser({'main': utils.main_data}).evaluate(index_template)
     file = open('../site/index.html', 'w')
     file.write(rendered)
     file.close()
