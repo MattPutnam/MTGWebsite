@@ -107,9 +107,9 @@ class ParserTest(unittest.TestCase):
 
     def test_template(self):
         test(self,
-             template='abc {{template:file=test.htmpl}} xyz',
-             expected='abc template text bar xyz',
-             data={'foo': 'bar'})
+             template='abc {{template:file=test.htmpl, a=b, c=$baz}} xyz',
+             expected='abc template text bar b qux xyz',
+             data={'foo': 'bar', 'baz': 'qux'})
 
 
 if __name__ == '__main__':

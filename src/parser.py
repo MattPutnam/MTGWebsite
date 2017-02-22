@@ -1,4 +1,5 @@
 import re
+from copy import deepcopy
 
 
 macro_pattern = '(\{\{.+?}})'
@@ -85,8 +86,8 @@ class Parser:
             assert set(data) == {'condition'}
             return If(self, data['condition'])
         elif name == 'template':
-            assert set(data) == {'file'}
-            return Template(self, data['file'])
+            assert set(data) >= {'file'}
+            return Template(self, data)
         else:
             raise ValueError(f'Unknown component: {name}')
 
@@ -131,8 +132,8 @@ class Parser:
 
 
 class Macro:
-    def __init__(self, parser: Parser):
-        self.parser = parser
+    def __init__(self):
+        pass
 
     def is_block(self):
         return False
@@ -143,7 +144,8 @@ class Macro:
 
 class Variable(Macro):
     def __init__(self, parser: Parser, variable: str):
-        super().__init__(parser)
+        super().__init__()
+        self.parser = parser
         self.variable = variable
 
     def render(self) -> str:
@@ -159,7 +161,8 @@ class Variable(Macro):
 
 class Foreach(Macro):
     def __init__(self, parser: Parser, source: str, variable_name: str):
-        super().__init__(parser)
+        super().__init__()
+        self.parser = parser
         self.source = source
         self.variable_name = variable_name
         self.body = []
@@ -179,7 +182,8 @@ class Foreach(Macro):
 
 class Resource(Macro):
     def __init__(self, parser: Parser, file: str):
-        super().__init__(parser)
+        super().__init__()
+        self.parser = parser
         self.file = file
 
     def render(self) -> str:
@@ -191,7 +195,8 @@ class Resource(Macro):
 
 class If(Macro):
     def __init__(self, parser: Parser, condition: str):
-        super().__init__(parser)
+        super().__init__()
+        self.parser = parser
         self.condition = condition
         self.body = []
 
@@ -220,7 +225,8 @@ class If(Macro):
 
 class Eval(Macro):
     def __init__(self, parser: Parser, full_expr: str):
-        super().__init__(parser)
+        super().__init__()
+        self.parser = parser
         match = re.match(eval_pattern, full_expr)
         self.expression = match.groups()[0]
 
@@ -232,15 +238,19 @@ class Eval(Macro):
 
 
 class Template(Macro):
-    def __init__(self, parser: Parser, file: str):
-        super().__init__(parser)
-        self.file = file
+    def __init__(self, parser: Parser, data: dict):
+        super().__init__()
+        self.parser = deepcopy(parser)
+        self.file = data.pop('file')
+
+        for key in data:
+            data[key] = parser.resolve_variable(data[key])
+        self.parser.data.update(data)
 
     def render(self) -> str:
         with open(self.file) as stream:
             contents = stream.read()
             return self.parser.evaluate(contents)
-
 
 
 END = '~~~END~~~'
