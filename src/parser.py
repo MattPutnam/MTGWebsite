@@ -15,6 +15,10 @@ class Parser:
         self.depth = depth
 
     def resolve_variable(self, variable: str, throw: bool = True) -> object:
+        # So you can use constants in place of variables:
+        if not variable[0] == '$':
+            return variable
+
         variable = variable[1:]
 
         tokens = re.split('[()]', variable)
@@ -177,7 +181,7 @@ class Resource(Macro):
         self.file = file
 
     def render(self) -> str:
-        return ('../' * self.parser.depth) + self.file
+        return ('../' * self.parser.depth) + str(self.parser.resolve_variable(self.file))
 
     def __repr__(self):
         return 'Resource[' + self.file + ']'
@@ -223,7 +227,6 @@ class Eval(Macro):
         for variable in re.findall('\$\S+', expr):
             expr = expr.replace(variable, str(self.parser.resolve_variable(variable)))
         return str(eval(expr))
-
 
 
 END = '~~~END~~~'

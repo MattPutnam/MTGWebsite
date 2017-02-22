@@ -72,6 +72,13 @@ class ParserTest(unittest.TestCase):
         expected = '<img src=../../test/file.txt />'
         self.assertEqual(expected, rendered)
 
+    def test_resource_var(self):
+        text = "<img src={{resource:file=$test.file}} />"
+        parser = Parser({'test': {'file': 'graphic.png'}}, depth=1)
+        rendered = parser.evaluate(text)
+        expected = '<img src=../graphic.png />'
+        self.assertEqual(expected, rendered)
+
     def test_if_no_var(self):
         text = "{{if:condition=$foo.dne}}{{$main.true}}\n" \
                "{{else}}{{$main.false}}\n" \
