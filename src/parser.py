@@ -14,8 +14,15 @@ class Parser:
         self.depth = depth
 
     def resolve_variable(self, variable: str, throw: bool = True) -> object:
-        thing = self.data
         variable = variable[1:]
+
+        tokens = re.split('[()]', variable)
+        for index, token in enumerate(tokens):
+            if token[0] == '$':
+                tokens[index] = self.resolve_variable(token, throw)
+        variable = "".join(tokens)
+
+        thing = self.data
         for token in variable.split('.'):
             if token in thing:
                 thing = thing[token]
@@ -152,7 +159,7 @@ class Foreach(Macro):
     def render(self) -> str:
         rendered_body = self.parser.render_list(self.body)
         resolved_source = self.parser.resolve_variable(self.source)
-        emitted = map(lambda item: rendered_body.replace(self.variable_name, item), resolved_source)
+        emitted = map(lambda item: rendered_body.replace(self.variable_name, str(item)), resolved_source)
         return "".join(emitted)
 
     def __repr__(self):

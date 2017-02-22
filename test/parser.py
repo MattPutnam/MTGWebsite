@@ -31,6 +31,14 @@ class ParserTest(unittest.TestCase):
         expected = 'Hello, John!'
         self.assertEqual(expected, rendered)
 
+    def test_nested_variables(self):
+        text = "{{$data.($data.keyA.keyB).keyC}}"
+        parser = Parser({'data': {'keyA': {'keyB': 'foo'},
+                                  'foo': {'keyC': 'bar'}}})
+        rendered = parser.evaluate(text)
+        expected = 'bar'
+        self.assertEqual(expected, rendered)
+
     def test_foreach(self):
         text = '{{$main.header}}\n' \
                '{{foreach:var=$foo, source=$main.data}}[test $foo]\n' \
@@ -45,6 +53,16 @@ class ParserTest(unittest.TestCase):
                    '[test c]\n' \
                    '\n' \
                    'end'
+        self.assertEqual(expected, rendered)
+
+    def test_foreach_cartesian(self):
+        text = '{{foreach:var=$row, source=$data.rows}}' \
+               '{{foreach:var=$col, source=$data.cols}}' \
+               '[$row $col]' \
+               '{{end}}{{end}}'
+        parser = Parser({'data': {'rows': [1, 2, 3], 'cols': ['A', 'B', 'C']}})
+        rendered = parser.evaluate(text)
+        expected = '[1 A][1 B][1 C][2 A][2 B][2 C][3 A][3 B][3 C]'
         self.assertEqual(expected, rendered)
 
     def test_resource(self):
@@ -65,14 +83,26 @@ class ParserTest(unittest.TestCase):
 
     def test_if_true(self):
         text = "{{if:condition=$foo.hello}}YES{{end}}"
+
         parser = Parser({'foo': {'hello': True}})
+        rendered = parser.evaluate(text)
+        expected = 'YES'
+        self.assertEqual(expected, rendered)
+
+        parser = Parser({'foo': {'hello': 'strings are truthy'}})
         rendered = parser.evaluate(text)
         expected = 'YES'
         self.assertEqual(expected, rendered)
 
     def test_if_false_no_else(self):
         text = "{{if:condition=$foo.hello}}YES{{end}}"
+
         parser = Parser({'foo': {'hello': False}})
+        rendered = parser.evaluate(text)
+        expected = ''
+        self.assertEqual(expected, rendered)
+
+        parser = Parser({'foo': {}}) # None is falsy
         rendered = parser.evaluate(text)
         expected = ''
         self.assertEqual(expected, rendered)
