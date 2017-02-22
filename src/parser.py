@@ -1,7 +1,8 @@
 import re
 
 
-pattern = '(\{\{.+?}})'
+macro_pattern = '(\{\{.+?}})'
+eval_pattern = '^eval\((.*)\)'
 
 
 def trim_all(strings):
@@ -18,6 +19,8 @@ class Parser:
 
         tokens = re.split('[()]', variable)
         for index, token in enumerate(tokens):
+            if token == '':
+                continue
             if token[0] == '$':
                 tokens[index] = self.resolve_variable(token, throw)
         variable = "".join(tokens)
@@ -35,12 +38,12 @@ class Parser:
 
     def parse(self, string: str) -> list:
         result = []
-        tokens = re.split(pattern, string, re.DOTALL | re.MULTILINE)
+        tokens = re.split(macro_pattern, string, re.DOTALL | re.MULTILINE)
         while len(tokens) > 0:
             token, *tokens = tokens
             if token == '':
                 pass
-            elif re.match(pattern, token):
+            elif re.match(macro_pattern, token):
                 colon_split = trim_all(token[2:-2].split(":", 1))
                 if len(colon_split) == 1:
                     value = colon_split[0]
@@ -48,6 +51,8 @@ class Parser:
                         result.append(END)
                     elif value == 'else':
                         result.append(ELSE)
+                    elif re.match(eval_pattern, value):
+                        result.append(Eval(self, value))
                     elif value[0] == '$':
                         result.append(Variable(self, value))
                     else:
@@ -205,6 +210,21 @@ class If(Macro):
 
     def __repr__(self):
         return 'If[' + self.condition + '] {' + str(self.body) + '}'
+
+
+class Eval(Macro):
+    def __init__(self, parser: Parser, full_expr: str):
+        super().__init__(parser, "Eval")
+        match = re.match(eval_pattern, full_expr)
+        self.expression = match.groups()[0]
+
+    def render(self) -> str:
+        expr = self.expression
+        for variable in re.findall('\$\S+', expr):
+            expr = expr.replace(variable, str(self.parser.resolve_variable(variable)))
+        return str(eval(expr))
+
+
 
 END = '~~~END~~~'
 ELSE = '~~~ELSE~~~'

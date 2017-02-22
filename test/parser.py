@@ -107,6 +107,22 @@ class ParserTest(unittest.TestCase):
         expected = ''
         self.assertEqual(expected, rendered)
 
+    def test_eval_no_vars(self):
+        text = 'abc {{eval(2 + 2)}} xyz'
+        parser = Parser({})
+        rendered = parser.evaluate(text)
+        expected = 'abc 4 xyz'
+        self.assertEqual(expected, rendered)
+
+    def test_eval_vars(self):
+        text = '{{$head}} {{eval($nums.x + $nums.($data.var))}} {{$tail}}'
+        parser = Parser({'head': 'abc', 'tail': 'xyz',
+                         'data': {'var': 'y'},
+                         'nums': {'x': '42', 'y': 11}})
+        rendered = parser.evaluate(text)
+        expected = 'abc 53 xyz'
+        self.assertEqual(expected, rendered)
+
 
 if __name__ == '__main__':
     unittest.main()
