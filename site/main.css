@@ -11,6 +11,7 @@ body {
     margin: 0 auto;
 }
 
+/* Header Stuff: */
 #header {
     background-color: #ffcc99;
     padding: .7rem;
@@ -38,6 +39,7 @@ body {
     height: 36px;
     width: auto;
 }
+/* End Header stuff */
 
 .page {
     padding: 0 1rem;
@@ -45,6 +47,7 @@ body {
     flex: 1 1 auto;
 }
 
+/* banner stuff: */
 .show_banner {
     padding: 0;
     border: none;
@@ -57,6 +60,31 @@ body {
     max-width: 100%;
     height: auto;
 }
+/* end banner stuff */
+
+/* Show header stuff */
+#show_header {
+    margin-top: 1rem;
+    display: flex;
+    align-items: flex-start;
+}
+
+#show_header > img {
+    margin-right: 1rem;
+}
+
+section {
+    margin: 1rem 0;
+}
+
+#title {
+    margin-top: 0;
+}
+
+#credits {
+    white-space: pre-wrap;
+    font-weight: 600;
+}
 
 #summary {
     max-width: 1000px;
@@ -64,6 +92,14 @@ body {
 
 #performance_dates {
     font-weight: 600;
+}
+/* end show header stuff */
+
+/* Table stuff */
+.table_container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
 }
 
 table {
@@ -102,39 +138,14 @@ th {
     padding-bottom: 0.5rem;
     border-bottom: 1px solid black;
 }
+/* end table stuff */
 
-.table_container {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-}
 
-#show_header {
-    margin-top: 1rem;
-    display: flex;
-    align-items: flex-start;
-}
 
-#show_header > img {
-    margin-right: 1rem;
-}
-
-h1.title {
-    margin-top: 0;
-}
-
-section {
-    margin: 1rem 0;
-}
-
-section.credits {
-    font-weight: 600;
-    white-space: pre-wrap;
-}
-
+/* Show list stuff */
 .show_summary {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     padding: 0.5rem 0;
     border-bottom: 1px solid black;
 }
@@ -179,3 +190,4 @@ section.credits {
     color: #993333;
     text-decoration: underline;
 }
+/* end show list stuff */

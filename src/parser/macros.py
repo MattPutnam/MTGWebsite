@@ -1,6 +1,7 @@
 from copy import deepcopy
 import re
-from os import listdir, path
+from os import path
+from glob import glob
 
 
 END = '~~~END~~~'
@@ -142,10 +143,11 @@ class WithResource(Macro):
 
     def render(self, parser) -> str:
         file_path = path.join(parser.root, *parser.path, self.file)
-        if path.exists(file_path):
+        files = glob(file_path)
+        if files:
             if self.reference:
                 local_parser = deepcopy(parser)
-                local_parser.data[self.reference] = self.file
+                local_parser.data[self.reference] = path.basename(files[0])
             else:
                 local_parser = parser
             return ''.join(local_parser.render_list(self.body))
