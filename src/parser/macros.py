@@ -145,7 +145,7 @@ class WithResource(Macro):
         if path.exists(file_path):
             if self.reference:
                 local_parser = deepcopy(parser)
-                local_parser.data[self.reference] = file_path
+                local_parser.data[self.reference] = self.file
             else:
                 local_parser = parser
             return ''.join(local_parser.render_list(self.body))

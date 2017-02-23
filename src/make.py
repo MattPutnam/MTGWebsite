@@ -25,7 +25,7 @@ def main():
     main_data = load_or_die('site', 'main.yaml')
     main_data['current_show_page'] = main_data['Current Show'] + '/show.html'
 
-    parser = Parser({'main': main_data}, root, [])
+    parser = Parser({'main': main_data}, root + '/site', [])
 
     render_index(parser)
     render_about(parser)

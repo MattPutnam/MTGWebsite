@@ -1,4 +1,11 @@
+{{withresource:file=banner.jpg, as=banner}}
+<div class="show_banner" align="middle">
+    <img src="{{$banner}}" />
+</div>
+{{end}}
+
 <div id="show_header">
+
     <div id="show_data">
         <h1 id="title">{{$show->Title}}</h1>
         <section id="credits">{{$show->Credits}}</section>
