@@ -78,18 +78,18 @@ class Parser:
         if name == 'foreach':
             assert set(data) == {'source', 'var'}
             return macros.Foreach(data['source'], data['var'])
-        elif name == 'resource':
+        elif name == 'static_resource':
             assert set(data) == {'file'}
-            return macros.Resource(data['file'])
+            return macros.StaticResource(data['file'])
         elif name == 'if':
             assert set(data) == {'condition'}
             return macros.If(data['condition'])
         elif name == 'template':
             assert set(data) >= {'file'}
             return macros.Template(data)
-        elif name == 'withresource':
+        elif name == 'with_local_resource':
             assert set(data) >= {'file'}
-            return macros.WithResource(data['file'], reference=data.get('as'))
+            return macros.WithLocalResource(data['file'], reference=data.get('as'))
         else:
             raise ValueError(f'Unknown component: {name}')
 

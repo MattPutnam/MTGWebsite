@@ -57,14 +57,14 @@ class ParserTest(unittest.TestCase):
              expected='[1 A][1 B][1 C][2 A][2 B][2 C][3 A][3 B][3 C]',
              data={'data': {'rows': [1, 2, 3], 'cols': ['A', 'B', 'C']}})
 
-    def test_resource(self):
+    def test_static_resource(self):
         test(self, path=['foo', 'bar'],
-             template='<img src={{resource:file=test/file.txt}} />',
+             template='<img src={{static_resource:file=test/file.txt}} />',
              expected='<img src=../../test/file.txt />')
 
-    def test_resource_var(self):
+    def test_static_resource_var(self):
         test(self, path=['foo'],
-             template='<img src={{resource:file=$test->file}} />',
+             template='<img src={{static_resource:file=$test->file}} />',
              expected='<img src=../graphic.png />',
              data={'test': {'file': 'graphic.png'}})
 
@@ -140,15 +140,15 @@ class ParserTest(unittest.TestCase):
              data={'content': {'Producer': 'Carol',
                                'Director': 'Dave'}})
 
-    def test_with_resource_none(self):
+    def test_with_local_resource_none(self):
         test(self,
-             template='{{withresource:file=does/not/exist.png, as=nomatter}}'
+             template='{{with_local_resource:file=does/not/exist.png, as=nomatter}}'
                       'Hello file: <img src={{$nomatter}} />{{end}}',
              expected = '')
 
-    def test_with_resource_exists(self):
+    def test_with_local_resource_exists(self):
         test(self,
-             template='{{withresource:file=test.htmpl, as=file}}'
+             template='{{with_local_resource:file=test.htmpl, as=file}}'
                       'Hello file: <img src={{$file}} />{{end}}',
              expected='Hello file: <img src=test.htmpl />')
 

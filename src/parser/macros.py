@@ -60,7 +60,7 @@ class Foreach(Macro):
         return 'Foreach[' + self.variable_name + ' in ' + str(self.source) + '] {' + str(self.body) + '}'
 
 
-class Resource(Macro):
+class StaticResource(Macro):
     def __init__(self, file: str):
         super().__init__()
         self.file = file
@@ -69,7 +69,7 @@ class Resource(Macro):
         return ('../' * len(parser.path)) + str(parser.resolve_variable(self.file))
 
     def __repr__(self):
-        return 'Resource[' + self.file + ']'
+        return 'StaticResource[' + self.file + ']'
 
 
 class If(Macro):
@@ -131,7 +131,7 @@ class Template(Macro):
             return parser.evaluate(contents)
 
 
-class WithResource(Macro):
+class WithLocalResource(Macro):
     def __init__(self, file, reference=None):
         super().__init__()
         self.file = file
