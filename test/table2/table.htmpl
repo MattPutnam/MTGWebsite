@@ -7,7 +7,7 @@
     <tbody>{{foreach:var=key, source=$content}}
         <tr>
             <td class="role">{{$key}}</td>
-            <td class="name">{{$content/($key)}}</td>
+            <td class="name">{{$content->($key)}}</td>
         </tr>{{end}}
     </tbody>
 </table>

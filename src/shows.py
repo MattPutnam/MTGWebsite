@@ -57,7 +57,7 @@ def make_show_page(main_parser, year, season, is_current, is_future, show_list):
 
     main_parser.data['show'] = show_data
     show_parser = deepcopy(main_parser)
-    show_parser.depth = 2
+    show_parser.path=[year, season]
 
     rendered = show_parser.evaluate(show_template)
 

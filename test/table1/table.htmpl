@@ -6,8 +6,8 @@
     </thead>
     <tbody>{{foreach:var=row, source=$content}}
         <tr>
-            <td class="role">{{$row/role}}</td>
-            <td class="name">{{$row/name}}</td>
+            <td class="role">{{$row->role}}</td>
+            <td class="name">{{$row->name}}</td>
         </tr>{{end}}
     </tbody>
 </table>

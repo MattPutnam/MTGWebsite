@@ -1,9 +1,9 @@
 import unittest
-from src.parser import Parser
+from src.parser.parser import Parser
 
 
-def test(self, template, expected, data={}, depth=0):
-    parser = Parser(data, depth)
+def test(self, template, expected, data={}, path=[]):
+    parser = Parser(data, '', path)
     rendered = parser.evaluate(template)
     self.assertEqual(expected, rendered)
 
@@ -14,24 +14,24 @@ class ParserTest(unittest.TestCase):
 
     def test_variables(self):
         test(self,
-             template="{{$local/greeting}}, {{$main/name/first}}!",
+             template="{{$local->greeting}}, {{$main->name->first}}!",
              expected='Hello, John!',
              data={'local': {'greeting': 'Hello'},
                    'main': {'name': {'first': 'John', 'last': 'Smith'}}})
 
     def test_nested_variables(self):
         test(self,
-             template='{{$data/($data/keyA/keyB)/keyC}}',
+             template='{{$data->($data->keyA->keyB)->keyC}}',
              expected='bar',
              data={'data': {'keyA': {'keyB': 'foo'},
                             'foo': {'keyC': 'bar'}}})
 
     def test_foreach(self):
         test(self,
-             template='{{$main/header}}\n'
-                      '{{foreach:var=foo, source=$main/data}}[test {{$foo}}]\n'
+             template='{{$main->header}}\n'
+                      '{{foreach:var=foo, source=$main->data}}[test {{$foo}}]\n'
                       '{{end}}\n'
-                      '{{$main/footer}}',
+                      '{{$main->footer}}',
              expected='start\n'
                       '[test a]\n'
                       '[test b]\n'
@@ -44,59 +44,59 @@ class ParserTest(unittest.TestCase):
         # just testing a single k/v pair since the order for multiple is undefined
         test(self,
              template='{{foreach:var=x, source=$data}}'
-                      '{{$x}} {{$data/($x)}}{{end}}',
+                      '{{$x}} {{$data->($x)}}{{end}}',
              expected='foo bar',
              data={'data': {'foo': 'bar'}})
 
     def test_foreach_cartesian(self):
         test(self,
-             template='{{foreach:var=row, source=$data/rows}}'
-                      '{{foreach:var=col, source=$data/cols}}'
+             template='{{foreach:var=row, source=$data->rows}}'
+                      '{{foreach:var=col, source=$data->cols}}'
                       '[{{$row}} {{$col}}]'
                       '{{end}}{{end}}',
              expected='[1 A][1 B][1 C][2 A][2 B][2 C][3 A][3 B][3 C]',
              data={'data': {'rows': [1, 2, 3], 'cols': ['A', 'B', 'C']}})
 
     def test_resource(self):
-        test(self, depth=2,
+        test(self, path=['foo', 'bar'],
              template='<img src={{resource:file=test/file.txt}} />',
              expected='<img src=../../test/file.txt />')
 
     def test_resource_var(self):
-        test(self, depth=1,
-             template='<img src={{resource:file=$test/file}} />',
+        test(self, path=['foo'],
+             template='<img src={{resource:file=$test->file}} />',
              expected='<img src=../graphic.png />',
              data={'test': {'file': 'graphic.png'}})
 
     def test_if_no_var(self):
         test(self,
-             template='{{if:condition=$foo/dne}}{{$main/true}}\n'
-                      '{{else}}{{$main/false}}\n'
+             template='{{if:condition=$foo->dne}}{{$main->true}}\n'
+                      '{{else}}{{$main->false}}\n'
                       '{{end}}',
              expected='expected\n',
              data={'main': {'true': 'Condition passed', 'false': 'expected'}})
 
     def test_if_true_bool(self):
         test(self,
-             template='{{if:condition=$foo/hello}}YES{{end}}',
+             template='{{if:condition=$foo->hello}}YES{{end}}',
              expected='YES',
              data={'foo': {'hello': True}})
 
     def test_if_true_val(self):
         test(self,
-             template='{{if:condition=$foo/hello}}YES{{end}}',
+             template='{{if:condition=$foo->hello}}YES{{end}}',
              expected='YES',
              data={'foo': {'hello': 'strings are truthy'}})
 
     def test_if_false_no_else_boolean(self):
         test(self,
-             template='{{if:condition=$foo/hello}}YES{{end}}',
+             template='{{if:condition=$foo->hello}}YES{{end}}',
              expected='',
              data={'foo': {'hello': False}})
 
     def test_if_false_no_else_none(self):
         test(self,
-             template='{{if:condition=$foo/hello}}YES{{end}}',
+             template='{{if:condition=$foo->hello}}YES{{end}}',
              expected='',
              data={'foo': {'hello': None}})
 
@@ -107,7 +107,7 @@ class ParserTest(unittest.TestCase):
 
     def test_eval_vars(self):
         test(self,
-             template='{{$head}} {{eval($nums/x + $nums/($data/var))}} {{$tail}}',
+             template='{{$head}} {{eval($nums->x + $nums->($data->var))}} {{$tail}}',
              expected='abc 53 xyz',
              data={'head': 'abc', 'tail': 'xyz',
                    'data': {'var': 'y'},
@@ -139,6 +139,18 @@ class ParserTest(unittest.TestCase):
              expected=expected,
              data={'content': {'Producer': 'Carol',
                                'Director': 'Dave'}})
+
+    def test_with_resource_none(self):
+        test(self,
+             template='{{withresource:file=does/not/exist.png, as=nomatter}}'
+                      'Hello file: <img src={{$nomatter}} />{{end}}',
+             expected = '')
+
+    def test_with_resource_exists(self):
+        test(self,
+             template='{{withresource:file=test.htmpl, as=file}}'
+                      'Hello file: <img src={{$file}} />{{end}}',
+             expected='Hello file: <img src=test.htmpl />')
 
 
 if __name__ == '__main__':

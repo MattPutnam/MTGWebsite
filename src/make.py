@@ -1,10 +1,10 @@
-import shows
-from utils import load_or_die, write
-
-import yaml
 import collections
 
-from parser import Parser
+import yaml
+
+import shows
+from parser.parser import Parser
+from utils import load_or_die, write, root
 
 # Setup yaml importer to use OrderedDict
 _mapping_tag = yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG
@@ -25,7 +25,7 @@ def main():
     main_data = load_or_die('site', 'main.yaml')
     main_data['current_show_page'] = main_data['Current Show'] + '/show.html'
 
-    parser = Parser({'main': main_data})
+    parser = Parser({'main': main_data}, root, [])
 
     render_index(parser)
     render_about(parser)

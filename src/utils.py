@@ -29,21 +29,20 @@ def write(parser, title, content, *paths):
     filename = path.join(root, *paths)
     dir_name = path.dirname(filename)
     css_files = [f for f in listdir(dir_name) if fnmatch(f, '*.css')]
-    if parser.depth == 2:
-        css_files.append('../../main.css')
+    if len(parser.path) > 0:
+        css_files.append(('../' * len(parser.path)) + 'main.css')
 
     local_data = {'title': title, 'content': content, 'css_files': css_files}
     parser.data['local'] = local_data
 
     page = parser.evaluate(page_template)
 
-    file = open(filename, 'w')
-    file.write(page)
-    file.close()
+    with open(filename, 'w') as stream:
+        stream.write(page)
 
 
-def find_show_file(path, name):
-    files = [file for file in listdir(path) if fnmatch(file.lower(), name + '.*')]
+def find_show_file(file_path, name):
+    files = [file for file in listdir(file_path) if fnmatch(file.lower(), name + '.*')]
     if len(files) > 0:
         return files[0]
 
