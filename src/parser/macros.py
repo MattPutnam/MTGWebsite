@@ -132,24 +132,32 @@ class Template(Macro):
 
 
 class WithLocalResource(Macro):
-    def __init__(self, file, reference=None):
+    def __init__(self, pattern, reference=None, all_files=False):
         super().__init__()
-        self.file = file
+        self.pattern = pattern
         self.reference = reference
+        self.all_files = all_files
         self.body = []
 
     def is_block(self):
         return True
 
     def render(self, parser) -> str:
-        file_path = path.join(parser.root, *parser.path, self.file)
+        file_path = path.join(parser.root, *parser.path, self.pattern)
         files = glob(file_path)
         if files:
             if self.reference:
                 local_parser = deepcopy(parser)
-                local_parser.data[self.reference] = path.basename(files[0])
+                if self.all_files:
+                    results = []
+                    for file in files:
+                        local_parser.data[self.reference] = path.basename(file)
+                        results.append(local_parser.render_list(self.body))
+                    return ''.join(results)
+                else:
+                    local_parser.data[self.reference] = path.basename(files[0])
+                    return local_parser.render_list(self.body)
             else:
-                local_parser = parser
-            return ''.join(local_parser.render_list(self.body))
+                return parser.render_list(self.body)
         else:
             return ''

@@ -1,10 +1,10 @@
-{{with_local_resource:file=banner.*, as=banner}}
+{{with_local_resource:glob=banner.*, as=banner}}
 <div class="show_banner" align="middle">
     <img src="{{$banner}}" alt="Show Banner" />
 </div>{{end}}
 
 <div id="show_header">
-    {{with_local_resource:file=graphic.*, as=graphic}}
+    {{with_local_resource:glob=graphic.*, as=graphic}}
     <img src="{{$graphic}}" alt="Show Graphic" />{{end}}
     <div id="show_data">
         <h1 id="title">{{$show->Title}}</h1>

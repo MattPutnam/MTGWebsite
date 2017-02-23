@@ -88,8 +88,8 @@ class Parser:
             assert set(data) >= {'file'}
             return macros.Template(data)
         elif name == 'with_local_resource':
-            assert set(data) >= {'file'}
-            return macros.WithLocalResource(data['file'], reference=data.get('as'))
+            assert set(data) >= {'glob'}
+            return macros.WithLocalResource(data['glob'], reference=data.get('as'), all_files=data.get('all_files'))
         else:
             raise ValueError(f'Unknown component: {name}')
 
@@ -112,7 +112,7 @@ class Parser:
         assert len(block_stack) == 1
         return block_stack[0]
 
-    def render_list(self, segments: list):
+    def render_list(self, segments: list) -> str:
         result = []
         for item in segments:
             if type(item) is str:
@@ -121,7 +121,7 @@ class Parser:
                 result.append(item.render(self))
             else:
                 raise ValueError(f'Unknown type: {item}')
-        return "".join(result)
+        return ''.join(result)
 
     def evaluate(self, string: str) -> str:
         parsed = self.parse(string)

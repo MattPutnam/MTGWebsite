@@ -142,15 +142,21 @@ class ParserTest(unittest.TestCase):
 
     def test_with_local_resource_none(self):
         test(self,
-             template='{{with_local_resource:file=does/not/exist.png, as=nomatter}}'
+             template='{{with_local_resource:glob=does/not/exist.png, as=nomatter}}'
                       'Hello file: <img src={{$nomatter}} />{{end}}',
              expected = '')
 
     def test_with_local_resource_exists(self):
         test(self,
-             template='{{with_local_resource:file=test.htmpl, as=file}}'
+             template='{{with_local_resource:glob=test.htmpl, as=file}}'
                       'Hello file: <img src={{$file}} />{{end}}',
              expected='Hello file: <img src=test.htmpl />')
+
+    def test_with_local_resource_multi(self):
+        test(self,
+             template='{{with_local_resource:glob=*.htmpl, as=file, all_files=True}}'
+                      'Test {{$file}} {{end}}',
+             expected='Test test.htmpl Test test2.htmpl ')
 
 
 if __name__ == '__main__':
