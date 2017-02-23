@@ -135,10 +135,9 @@ class ParserTest(unittest.TestCase):
             expected = stream.read()
 
         test(self,
-             template='{{template:file=table2/table.htmpl, header=$header, content=$content}}',
+             template='{{template:file=table2/table.htmpl, header=Test Table 2, content=$content}}',
              expected=expected,
-             data={'header': 'Test Table 2',
-                   'content': {'Producer': 'Carol',
+             data={'content': {'Producer': 'Carol',
                                'Director': 'Dave'}})
 
 
