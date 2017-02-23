@@ -14,24 +14,24 @@ class ParserTest(unittest.TestCase):
 
     def test_variables(self):
         test(self,
-             template="{{$local.greeting}}, {{$main.name.first}}!",
+             template="{{$local/greeting}}, {{$main/name/first}}!",
              expected='Hello, John!',
              data={'local': {'greeting': 'Hello'},
                    'main': {'name': {'first': 'John', 'last': 'Smith'}}})
 
     def test_nested_variables(self):
         test(self,
-             template='{{$data.($data.keyA.keyB).keyC}}',
+             template='{{$data/($data/keyA/keyB)/keyC}}',
              expected='bar',
              data={'data': {'keyA': {'keyB': 'foo'},
-                                  'foo': {'keyC': 'bar'}}})
+                            'foo': {'keyC': 'bar'}}})
 
     def test_foreach(self):
         test(self,
-             template='{{$main.header}}\n'
-                      '{{foreach:var=$foo, source=$main.data}}[test $foo]\n'
+             template='{{$main/header}}\n'
+                      '{{foreach:var=foo, source=$main/data}}[test {{$foo}}]\n'
                       '{{end}}\n'
-                      '{{$main.footer}}',
+                      '{{$main/footer}}',
              expected='start\n'
                       '[test a]\n'
                       '[test b]\n'
@@ -42,9 +42,9 @@ class ParserTest(unittest.TestCase):
 
     def test_foreach_cartesian(self):
         test(self,
-             template='{{foreach:var=$row, source=$data.rows}}'
-                      '{{foreach:var=$col, source=$data.cols}}'
-                      '[$row $col]'
+             template='{{foreach:var=row, source=$data/rows}}'
+                      '{{foreach:var=col, source=$data/cols}}'
+                      '[{{$row}} {{$col}}]'
                       '{{end}}{{end}}',
              expected='[1 A][1 B][1 C][2 A][2 B][2 C][3 A][3 B][3 C]',
              data={'data': {'rows': [1, 2, 3], 'cols': ['A', 'B', 'C']}})
@@ -56,39 +56,39 @@ class ParserTest(unittest.TestCase):
 
     def test_resource_var(self):
         test(self, depth=1,
-             template='<img src={{resource:file=$test.file}} />',
+             template='<img src={{resource:file=$test/file}} />',
              expected='<img src=../graphic.png />',
              data={'test': {'file': 'graphic.png'}})
 
     def test_if_no_var(self):
         test(self,
-             template='{{if:condition=$foo.dne}}{{$main.true}}\n'
-                      '{{else}}{{$main.false}}\n'
+             template='{{if:condition=$foo/dne}}{{$main/true}}\n'
+                      '{{else}}{{$main/false}}\n'
                       '{{end}}',
              expected='expected\n',
              data={'main': {'true': 'Condition passed', 'false': 'expected'}})
 
     def test_if_true_bool(self):
         test(self,
-             template='{{if:condition=$foo.hello}}YES{{end}}',
+             template='{{if:condition=$foo/hello}}YES{{end}}',
              expected='YES',
              data={'foo': {'hello': True}})
 
     def test_if_true_val(self):
         test(self,
-             template='{{if:condition=$foo.hello}}YES{{end}}',
+             template='{{if:condition=$foo/hello}}YES{{end}}',
              expected='YES',
              data={'foo': {'hello': 'strings are truthy'}})
 
     def test_if_false_no_else_boolean(self):
         test(self,
-             template='{{if:condition=$foo.hello}}YES{{end}}',
+             template='{{if:condition=$foo/hello}}YES{{end}}',
              expected='',
              data={'foo': {'hello': False}})
 
     def test_if_false_no_else_none(self):
         test(self,
-             template='{{if:condition=$foo.hello}}YES{{end}}',
+             template='{{if:condition=$foo/hello}}YES{{end}}',
              expected='',
              data={'foo': {'hello': None}})
 
@@ -99,7 +99,7 @@ class ParserTest(unittest.TestCase):
 
     def test_eval_vars(self):
         test(self,
-             template='{{$head}} {{eval($nums.x + $nums.($data.var))}} {{$tail}}',
+             template='{{$head}} {{eval($nums/x + $nums/($data/var))}} {{$tail}}',
              expected='abc 53 xyz',
              data={'head': 'abc', 'tail': 'xyz',
                    'data': {'var': 'y'},
@@ -110,6 +110,17 @@ class ParserTest(unittest.TestCase):
              template='abc {{template:file=test.htmpl, a=b, c=$baz}} xyz',
              expected='abc template text bar b qux xyz',
              data={'foo': 'bar', 'baz': 'qux'})
+
+    def test_table_template(self):
+        with open('table_expected.txt') as stream:
+            expected = stream.read()
+
+        test(self,
+             template='{{template:file=table.htmpl, header=$header, content=$content}}',
+             expected=expected,
+             data={'header': 'Test Table',
+                   'content': [{'role': 'Producer', 'name': 'Alice'},
+                               {'role': 'Director', 'name': 'Bob'}]})
 
 
 if __name__ == '__main__':

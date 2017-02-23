@@ -3,7 +3,7 @@ from copy import deepcopy
 
 
 macro_pattern = '(\{\{.+?}})'
-eval_pattern = '^eval\((.*)\)'
+eval_pattern = '^eval\((.*)\)$'
 
 
 def trim_all(strings):
@@ -31,7 +31,7 @@ class Parser:
         variable = "".join(tokens)
 
         thing = self.data
-        for token in variable.split('.'):
+        for token in variable.split('/'):
             if token in thing:
                 thing = thing[token]
             else:
@@ -57,9 +57,9 @@ class Parser:
                     elif value == 'else':
                         result.append(ELSE)
                     elif re.match(eval_pattern, value):
-                        result.append(Eval(self, value))
+                        result.append(Eval(value))
                     elif value[0] == '$':
-                        result.append(Variable(self, value))
+                        result.append(Variable(value))
                     else:
                         raise ValueError(f'Unable to parse macro {token}')
                 else:
@@ -75,34 +75,32 @@ class Parser:
                 result.append(token)
         return result
 
-    def resolve_component(self, name: str, data: dict):
+    @staticmethod
+    def resolve_component(name: str, data: dict):
         if name == 'foreach':
             assert set(data) == {'source', 'var'}
-            return Foreach(self, data['source'], data['var'])
+            return Foreach(data['source'], data['var'])
         elif name == 'resource':
             assert set(data) == {'file'}
-            return Resource(self, data['file'])
+            return Resource(data['file'])
         elif name == 'if':
             assert set(data) == {'condition'}
-            return If(self, data['condition'])
+            return If(data['condition'])
         elif name == 'template':
             assert set(data) >= {'file'}
-            return Template(self, data)
+            return Template(data)
         else:
             raise ValueError(f'Unknown component: {name}')
 
     @staticmethod
-    def resolve_macros(segments: list):
+    def pack_macros(segments: list):
         component_stack = []
         block_stack = [[]]
         while len(segments) > 0:
             segment, *segments = segments
             if segment is END:
-                top_component = component_stack[-1]
-                top_component.body = block_stack[-1]
-
-                component_stack = component_stack[:-1]
-                block_stack = block_stack[:-1]
+                top_component = component_stack.pop()
+                top_component.body = block_stack.pop()
                 block_stack[-1].append(top_component)
             elif issubclass(type(segment), Macro) and segment.is_block():
                 component_stack.append(segment)
@@ -113,21 +111,20 @@ class Parser:
         assert len(block_stack) == 1
         return block_stack[0]
 
-    @staticmethod
-    def render_list(segments: list):
+    def render_list(self, segments: list):
         result = []
         for item in segments:
             if type(item) is str:
                 result.append(item)
             elif issubclass(type(item), Macro):
-                result.append(item.render())
+                result.append(item.render(self))
             else:
                 raise ValueError(f'Unknown type: {item}')
         return "".join(result)
 
     def evaluate(self, string: str) -> str:
         parsed = self.parse(string)
-        resolved = self.resolve_macros(parsed)
+        resolved = self.pack_macros(parsed)
         return self.render_list(resolved)
 
 
@@ -138,31 +135,26 @@ class Macro:
     def is_block(self):
         return False
 
-    def render(self) -> str:
+    def render(self, parser: Parser) -> str:
         raise NotImplementedError('Render not implemented')
 
 
 class Variable(Macro):
-    def __init__(self, parser: Parser, variable: str):
+    def __init__(self, variable: str):
         super().__init__()
-        self.parser = parser
         self.variable = variable
 
-    def render(self) -> str:
-        result = self.parser.resolve_variable(self.variable)
-        if type(result) is str:
-            return str(result)
-        else:
-            raise ValueError("Variable didn't resolve to string")
+    def render(self, parser: Parser) -> str:
+        result = parser.resolve_variable(self.variable)
+        return str(result)
 
     def __repr__(self):
         return 'Variable[' + self.variable + "]"
 
 
 class Foreach(Macro):
-    def __init__(self, parser: Parser, source: str, variable_name: str):
+    def __init__(self, source: str, variable_name: str):
         super().__init__()
-        self.parser = parser
         self.source = source
         self.variable_name = variable_name
         self.body = []
@@ -170,40 +162,44 @@ class Foreach(Macro):
     def is_block(self):
         return True
 
-    def render(self) -> str:
-        rendered_body = self.parser.render_list(self.body)
-        resolved_source = self.parser.resolve_variable(self.source)
-        emitted = map(lambda item: rendered_body.replace(self.variable_name, str(item)), resolved_source)
-        return "".join(emitted)
+    def render(self, parser: Parser) -> str:
+        resolved_source = parser.resolve_variable(self.source)
+        assert type(resolved_source) is list
+
+        bodies = []
+        for value in list(resolved_source):
+            local_parser = deepcopy(parser)
+            local_parser.data[self.variable_name] = value
+            bodies.append(local_parser.render_list(self.body))
+
+        return "".join(bodies)
 
     def __repr__(self):
         return 'Foreach[' + self.variable_name + ' in ' + str(self.source) + '] {' + str(self.body) + '}'
 
 
 class Resource(Macro):
-    def __init__(self, parser: Parser, file: str):
+    def __init__(self, file: str):
         super().__init__()
-        self.parser = parser
         self.file = file
 
-    def render(self) -> str:
-        return ('../' * self.parser.depth) + str(self.parser.resolve_variable(self.file))
+    def render(self, parser: Parser) -> str:
+        return ('../' * parser.depth) + str(parser.resolve_variable(self.file))
 
     def __repr__(self):
         return 'Resource[' + self.file + ']'
 
 
 class If(Macro):
-    def __init__(self, parser: Parser, condition: str):
+    def __init__(self, condition: str):
         super().__init__()
-        self.parser = parser
         self.condition = condition
         self.body = []
 
     def is_block(self):
         return True
 
-    def render(self) -> str:
+    def render(self, parser: Parser) -> str:
         if ELSE in self.body:
             else_index = self.body.index(ELSE)
             body_true = self.body[:else_index]
@@ -212,45 +208,45 @@ class If(Macro):
             body_true = self.body
             body_false = []
 
-        if self.condition[0] != '$' or self.parser.resolve_variable(self.condition, throw=False):
+        if self.condition[0] != '$' or parser.resolve_variable(self.condition, throw=False):
             body = body_true
         else:
             body = body_false
 
-        return "".join(self.parser.render_list(body))
+        return "".join(parser.render_list(body))
 
     def __repr__(self):
         return 'If[' + self.condition + '] {' + str(self.body) + '}'
 
 
 class Eval(Macro):
-    def __init__(self, parser: Parser, full_expr: str):
+    def __init__(self, full_expr: str):
         super().__init__()
-        self.parser = parser
         match = re.match(eval_pattern, full_expr)
         self.expression = match.groups()[0]
 
-    def render(self) -> str:
+    def render(self, parser: Parser) -> str:
         expr = self.expression
-        for variable in re.findall('\$\S+', expr):
-            expr = expr.replace(variable, str(self.parser.resolve_variable(variable)))
+        for variable in re.findall('\$[a-zA-Z()/$]+', expr):
+            expr = expr.replace(variable, str(parser.resolve_variable(variable)))
         return str(eval(expr))
 
 
 class Template(Macro):
-    def __init__(self, parser: Parser, data: dict):
+    def __init__(self, data: dict):
         super().__init__()
-        self.parser = deepcopy(parser)
         self.file = data.pop('file')
+        self.data = data
 
-        for key in data:
-            data[key] = parser.resolve_variable(data[key])
-        self.parser.data.update(data)
+    def render(self, parser: Parser) -> str:
+        resolved_data = {}
+        for key in self.data:
+            resolved_data[key] = parser.resolve_variable(self.data[key])
 
-    def render(self) -> str:
+        parser.data.update(resolved_data)
         with open(self.file) as stream:
             contents = stream.read()
-            return self.parser.evaluate(contents)
+            return parser.evaluate(contents)
 
 
 END = '~~~END~~~'
