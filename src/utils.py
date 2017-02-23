@@ -30,7 +30,7 @@ def write(parser, title, content, *paths):
     dir_name = path.dirname(filename)
     css_files = [f for f in listdir(dir_name) if fnmatch(f, '*.css')]
     if len(parser.path) > 0:
-        css_files.append(('../' * len(parser.path)) + 'main.css')
+        css_files.insert(0, ('../' * len(parser.path)) + 'main.css')
 
     local_data = {'title': title, 'content': content, 'css_files': css_files}
     parser.data['local'] = local_data
