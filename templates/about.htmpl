@@ -17,6 +17,6 @@
     With general inquiries, please contact <a href="mailto:mtg-board@mit.edu">the managing board</a>.
 </p>
 <div id="board_personnel" class="table_container">
-    {{template:file=../templates/table.htmpl, header=MTG Officers, content=$main/Managing Board}}
-    {{template:file=../templates/table.htmpl, header=Appointed Positions, content=$main/Appointed Positions}}
+    {{template:file=../templates/table.htmpl, header=MTG Officers, content=$main->Managing Board}}
+    {{template:file=../templates/table.htmpl, header=Appointed Positions, content=$main->Appointed Positions}}
 </div>

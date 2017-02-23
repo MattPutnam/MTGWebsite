@@ -31,7 +31,7 @@ class Parser:
         variable = "".join(tokens)
 
         thing = self.data
-        for token in variable.split('/'):
+        for token in variable.split('->'):
             if token in thing:
                 thing = thing[token]
             else:
@@ -226,7 +226,7 @@ class Eval(Macro):
 
     def render(self, parser: Parser) -> str:
         expr = self.expression
-        for variable in re.findall('\$[a-zA-Z()/$]+', expr):
+        for variable in re.findall('\$[a-zA-Z()\->$]+', expr):
             expr = expr.replace(variable, str(parser.resolve_variable(variable)))
         return str(eval(expr))
 
