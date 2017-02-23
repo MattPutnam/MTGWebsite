@@ -15,7 +15,7 @@ class Parser:
         self.data = data
         self.depth = depth
 
-    def resolve_variable(self, variable: str, throw: bool = True) -> object:
+    def resolve_variable(self, variable: str, throw: bool = False) -> object:
         # So you can use constants in place of variables:
         if not variable[0] == '$':
             return variable
@@ -38,7 +38,7 @@ class Parser:
                 if throw:
                     raise ValueError(f'Unable to resolve variable: {variable}')
                 else:
-                    return {}
+                    return ''
         return thing
 
     def parse(self, string: str) -> list:

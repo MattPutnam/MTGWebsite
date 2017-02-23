@@ -1,18 +1,14 @@
-{{banner:filename=banner}}
-
 <div id="show_header">
-    {{img:filename=graphic}}
     <div id="show_data">
         <h1 id="title">{{$show/Title}}</h1>
         <section id="credits">{{$show/Credits}}</section>
         <section id="summary">{{$show/Summary}}</section>
-        <section id="performances">{{performances:dates=$show/Performance Dates, venue=$show/Venue}}</section>
     </div>
 </div>
 
 
 <div id="show_personnel" class="table_container">
-    {{table:header=Production Staff, content=$show/Production Staff}}
-    {{table:header=Cast, content=$show/Cast}}
-    {{table:header=Orchestra, content=$show/Orchestra}}
+    {{template:file=../templates/table.htmpl, header=Production Staff, content=$show/Production Staff}}
+    {{template:file=../templates/table.htmpl, header=Cast, content=$show/Cast}}
+    {{template:file=../templates/table.htmpl, header=Orchestra, content=$show/Orchestra}}
 </div>

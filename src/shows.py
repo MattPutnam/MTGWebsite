@@ -1,15 +1,16 @@
 import re
+from copy import deepcopy
 from os import listdir, path
 
 import utils
-from utils import load_or_die, root, render_template, write
+from utils import load_or_die, write
 
 show_template = load_or_die('templates', 'show.htmpl')
 summary_template = load_or_die('templates', 'summary.htmpl')
 
 
-def render_shows():
-    years = [year for year in listdir(path.join(root, 'site')) if re.match("\d{4}", year)]
+def render_shows(parser, current_show_tokens):
+    years = [year for year in listdir(path.join(utils.root, 'site')) if re.match("\d{4}", year)]
     years.sort()
     seasons = ['IAP', 'Spring', 'Summer', 'Fall']
 
@@ -18,25 +19,29 @@ def render_shows():
 
     for year in reversed(years):
         for season in reversed(seasons):
-            is_current = [year, season] == utils.current_show_tokens
+            is_current = [year, season] == current_show_tokens
             if is_current:
                 is_future = False
 
-            utils.cur_path = path.join(root, 'site', year, season)
-            if path.isdir(utils.cur_path):
-                make_show_page(year, season, is_current, is_future, show_list)
+            cur_path = path.join(utils.root, 'site', year, season)
+            if path.isdir(cur_path):
+                make_show_page(parser, year, season, is_current, is_future, show_list)
 
-    write('MTG - Show List', "".join(show_list), 'main', 'site', 'show_list.html')
+    write(parser,
+          'MTG - Show List',
+          "".join(show_list),
+          'site', 'show_list.html')
 
 
-def make_show_page(year, season, is_current, is_future, show_list):
-    yaml_path = path.join(root, 'site', year, season, 'show.yaml')
+def make_show_page(main_parser, year, season, is_current, is_future, show_list):
+    dir_path = path.join(utils.root, 'site', year, season)
+    yaml_path = path.join(dir_path, 'show.yaml')
     if not path.isfile(yaml_path):
         return
 
     show_data = load_or_die(yaml_path)
 
-    graphic = utils.find_show_file('graphic')
+    graphic = utils.find_show_file(dir_path, 'graphic')
     if graphic:
         graphic = year + '/' + season + '/' + graphic
     else:
@@ -44,16 +49,21 @@ def make_show_page(year, season, is_current, is_future, show_list):
             graphic = 'images/comingsoon.jpg'
         else:
             graphic = 'images/placeholder.png'
-    banner = utils.find_show_file('banner')
+    banner = utils.find_show_file(dir_path, 'banner')
 
     show_data.update({'year': year, 'season': season, 'graphic': graphic})
     if banner:
         show_data['banner'] = banner
 
-    rendered = render_template(show_template, context='show', show_data=show_data)
-    write('MTG - ' + show_data['Title'] + ' (' + year + ")",
+    main_parser.data['show'] = show_data
+    show_parser = deepcopy(main_parser)
+    show_parser.depth = 2
+
+    rendered = show_parser.evaluate(show_template)
+
+    write(show_parser,
+          'MTG - ' + show_data['Title'] + ' (' + year + ")",
           rendered,
-          'show',
           'site', year, season, 'show.html')
 
-    show_list.append(render_template(summary_template, context='main', show_data=show_data))
+    show_list.append(main_parser.evaluate(summary_template))

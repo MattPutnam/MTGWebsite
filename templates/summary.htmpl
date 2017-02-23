@@ -6,6 +6,5 @@
         <div class="summary_slot">{{$show/season}} {{$show/year}}</div>
         <a class="summary_title" href="{{$show/year}}/{{$show/season}}/show.html">{{$show/Title}}</a>
         <div class="summary_credits">{{$show/Credits}}</div>
-        <div class="summary_venue">{{performances:dates=$show/Performance Dates, venue=$show/Venue}}</div>
     </div>
 </div>

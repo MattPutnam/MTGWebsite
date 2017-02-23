@@ -1,12 +1,10 @@
 import shows
-import utils
-from utils import load_or_die, render_template, write
+from utils import load_or_die, write
 
 import yaml
 import collections
 
-import parser
-
+from parser import Parser
 
 # Setup yaml importer to use OrderedDict
 _mapping_tag = yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG
@@ -26,28 +24,27 @@ yaml.add_constructor(_mapping_tag, dict_constructor)
 def main():
     main_data = load_or_die('site', 'main.yaml')
     main_data['current_show_page'] = main_data['Current Show'] + '/show.html'
-    utils.main_data = main_data
-    utils.current_show_tokens = main_data['Current Show'].split('/')
 
-    render_index()
-    render_about()
-    shows.render_shows()
+    parser = Parser({'main': main_data})
+
+    render_index(parser)
+    render_about(parser)
+    shows.render_shows(parser, main_data['Current Show'].split('/'))
 
     print("Success!")
 
 
-def render_about():
+def render_about(parser):
     about_template = load_or_die('templates', 'about.htmpl')
-    rendered = render_template(about_template, context='main')
-    write('MTG - About MTG', rendered, 'main', 'site', 'about.html')
+    rendered = parser.evaluate(about_template)
+    write(parser, 'MTG - About MTG', rendered, 'site', 'about.html')
 
 
-def render_index():
+def render_index(parser):
     index_template = load_or_die('templates', 'index.htmpl')
-    rendered = parser.Parser({'main': utils.main_data}).evaluate(index_template)
-    file = open('../site/index.html', 'w')
-    file.write(rendered)
-    file.close()
+    rendered = parser.evaluate(index_template)
+    with open('../site/index.html', 'w') as stream:
+        stream.write(rendered)
 
 
 if __name__ == '__main__':

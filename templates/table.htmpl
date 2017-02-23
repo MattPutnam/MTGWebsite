@@ -4,10 +4,10 @@
             <th colspan="2">{{$header}}</th>
         </tr>
     </thead>
-    <tbody>{{foreach:var=row, source=$content}}
+    <tbody>{{foreach:var=key, source=$content}}
         <tr>
-            <td class="role">{{$row/role}}</td>
-            <td class="name">{{$row/name}}</td>
+            <td class="role">{{$key}}</td>
+            <td class="name">{{$content/($key)}}</td>
         </tr>{{end}}
     </tbody>
 </table>
