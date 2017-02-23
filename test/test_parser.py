@@ -40,6 +40,14 @@ class ParserTest(unittest.TestCase):
                       'end',
              data={'main': {'header': 'start', 'data': ['a', 'b', 'c'], 'footer': 'end'}})
 
+    def test_foreach_map(self):
+        # just testing a single k/v pair since the order for multiple is undefined
+        test(self,
+             template='{{foreach:var=x, source=$data}}'
+                      '{{$x}} {{$data/($x)}}{{end}}',
+             expected='foo bar',
+             data={'data': {'foo': 'bar'}})
+
     def test_foreach_cartesian(self):
         test(self,
              template='{{foreach:var=row, source=$data/rows}}'
@@ -111,16 +119,27 @@ class ParserTest(unittest.TestCase):
              expected='abc template text bar b qux xyz',
              data={'foo': 'bar', 'baz': 'qux'})
 
-    def test_table_template(self):
-        with open('table_expected.txt') as stream:
+    def test_table_template_1(self):
+        with open('table1/table_expected.txt') as stream:
             expected = stream.read()
 
         test(self,
-             template='{{template:file=table.htmpl, header=$header, content=$content}}',
+             template='{{template:file=table1/table.htmpl, header=$header, content=$content}}',
              expected=expected,
              data={'header': 'Test Table',
                    'content': [{'role': 'Producer', 'name': 'Alice'},
                                {'role': 'Director', 'name': 'Bob'}]})
+
+    def test_table_template_2(self):
+        with open('table2/table_expected.txt') as stream:
+            expected = stream.read()
+
+        test(self,
+             template='{{template:file=table2/table.htmpl, header=$header, content=$content}}',
+             expected=expected,
+             data={'header': 'Test Table 2',
+                   'content': {'Producer': 'Carol',
+                               'Director': 'Dave'}})
 
 
 if __name__ == '__main__':

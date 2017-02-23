@@ -164,10 +164,9 @@ class Foreach(Macro):
 
     def render(self, parser: Parser) -> str:
         resolved_source = parser.resolve_variable(self.source)
-        assert type(resolved_source) is list
 
         bodies = []
-        for value in list(resolved_source):
+        for value in resolved_source:
             local_parser = deepcopy(parser)
             local_parser.data[self.variable_name] = value
             bodies.append(local_parser.render_list(self.body))
