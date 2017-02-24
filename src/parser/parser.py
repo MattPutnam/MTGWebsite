@@ -47,7 +47,11 @@ class Parser:
             if token == '':
                 pass
             elif re.match(macros.macro_pattern, token):
-                colon_split = trim_all(token[2:-2].split(":", 1))
+                innards = token[2:-2]
+                if innards.startswith('comment'):
+                    continue
+
+                colon_split = trim_all(innards.split(":", 1))
                 if len(colon_split) == 1:
                     value = colon_split[0]
                     if value == 'end':
@@ -58,8 +62,6 @@ class Parser:
                         result.append(macros.Eval(value))
                     elif value[0] == '$':
                         result.append(macros.Variable(value))
-                    elif value.startswith("comment"):
-                        pass
                     elif value.startswith("blockcomment"):
                         result.append(macros.BlockComment())
                     else:

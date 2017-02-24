@@ -159,7 +159,7 @@ class ParserTest(unittest.TestCase):
 
     def test_comment(self):
         test(self,
-             template="before {{comment hey there I shouldn't render)}} after",
+             template="before {{comment: hey there I shouldn't render}} after",
              expected='before  after')
 
     def test_block_comment(self):

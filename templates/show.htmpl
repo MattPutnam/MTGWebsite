@@ -33,4 +33,7 @@
         <img class="production_photo" src="photos/thumbnails/{{eval('-thumb.'.join('$photo'.split('.')))}}" alt="" /></a>{{end}}
 </div>
 
+{{comment: only load the lightbox js if there are photos}}
+{{with_local_resource:glob=photos/full/*, as=ignored}}
 <script src="{{static_resource:file=js/lightbox-plus-jquery.min.js}}"></script>
+{{end}}
