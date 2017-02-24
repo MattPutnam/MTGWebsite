@@ -8,6 +8,11 @@ def test(self, template, expected, data={}, path=[]):
     self.assertEqual(expected, rendered)
 
 
+def read_file(filename):
+    with open(filename) as stream:
+        return stream.read()
+
+
 class ParserTest(unittest.TestCase):
     def test_no_tokens(self):
         test(self, template='this is some text', expected='this is some text')
@@ -120,23 +125,17 @@ class ParserTest(unittest.TestCase):
              data={'foo': 'bar', 'baz': 'qux'})
 
     def test_table_template_1(self):
-        with open('table1/table_expected.txt') as stream:
-            expected = stream.read()
-
         test(self,
              template='{{template:file=table1/table.htmpl, header=$header, content=$content}}',
-             expected=expected,
+             expected=read_file('table1/table_expected.txt'),
              data={'header': 'Test Table',
                    'content': [{'role': 'Producer', 'name': 'Alice'},
                                {'role': 'Director', 'name': 'Bob'}]})
 
     def test_table_template_2(self):
-        with open('table2/table_expected.txt') as stream:
-            expected = stream.read()
-
         test(self,
              template='{{template:file=table2/table.htmpl, header=Test Table 2, content=$content}}',
-             expected=expected,
+             expected=read_file('table2/table_expected.txt'),
              data={'content': {'Producer': 'Carol',
                                'Director': 'Dave'}})
 
