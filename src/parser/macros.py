@@ -161,3 +161,15 @@ class WithLocalResource(Macro):
                 return parser.render_list(self.body)
         else:
             return ''
+
+
+class BlockComment(Macro):
+    def __init__(self):
+        super().__init__()
+        self.body = []
+
+    def is_block(self):
+        return True
+
+    def render(self, parser) -> str:
+        return ''

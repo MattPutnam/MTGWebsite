@@ -158,6 +158,16 @@ class ParserTest(unittest.TestCase):
                       'Test {{$file}} {{end}}',
              expected='Test test.htmpl Test test2.htmpl ')
 
+    def test_comment(self):
+        test(self,
+             template="before {{comment hey there I shouldn't render)}} after",
+             expected='before  after')
+
+    def test_block_comment(self):
+        test(self,
+             template='before {{blockcomment}} {{$dne}} {{if:condition=$foo}} text {{end}}{{end}} after',
+             expected='before  after')
+
 
 if __name__ == '__main__':
     unittest.main()

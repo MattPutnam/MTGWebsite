@@ -58,6 +58,10 @@ class Parser:
                         result.append(macros.Eval(value))
                     elif value[0] == '$':
                         result.append(macros.Variable(value))
+                    elif value.startswith("comment"):
+                        pass
+                    elif value.startswith("blockcomment"):
+                        result.append(macros.BlockComment())
                     else:
                         raise ValueError(f'Unable to parse macro {token}')
                 else:
