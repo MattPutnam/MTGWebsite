@@ -1,2 +1,2 @@
-Performances <span class="performance_dates">{{$local/dates}}</span> in
-<a href="{{$local->href}}" class="venue_link" target="_blank">{{$local->text}}</a>
+Performances <span class="performance_dates">{{$show->Performance Dates}}</span>
+in <a href="{{$venues->($show->Venue)->Location}}" target="_blank">{{$venues->($show->Venue)->Full Name}}</a>

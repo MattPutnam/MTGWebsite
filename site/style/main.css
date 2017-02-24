@@ -90,7 +90,7 @@ section {
     font-weight: 600;
 }
 
-#performance_dates {
+.performance_dates {
     font-weight: 600;
 }
 /* end show header stuff */
@@ -192,17 +192,21 @@ th {
     font-weight: bold;
 }
 
-.summary_venue {
+.summary_performances {
     margin-top: 0.5rem;
     font-size: 90%;
 }
 
-.summary_venue > a {
+.summary_performances > .performance_dates {
+    font-weight: 400;
+}
+
+.summary_performances > a {
     text-decoration: none;
     color: black;
 }
 
-.summary_venue > a:hover {
+.summary_performances > a:hover {
     color: #993333;
     text-decoration: underline;
 }
