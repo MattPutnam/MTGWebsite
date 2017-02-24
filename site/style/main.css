@@ -73,6 +73,10 @@ body {
     margin-right: 1rem;
 }
 
+p {
+    max-width: 975px;
+}
+
 section {
     margin: 1rem 0;
 }
@@ -84,10 +88,6 @@ section {
 #credits {
     white-space: pre-wrap;
     font-weight: 600;
-}
-
-#summary {
-    max-width: 1000px;
 }
 
 #performance_dates {
