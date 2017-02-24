@@ -96,13 +96,14 @@ section {
 /* end show header stuff */
 
 /* Table stuff */
-.table_container {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
+.table_container:after {
+    content: "";
+    display: table;
+    clear: both;
 }
 
 table {
+    float: left;
     border-collapse: collapse;
     margin: 1rem;
 }
