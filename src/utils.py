@@ -28,7 +28,7 @@ page_template = load_or_die('templates', 'page.htmpl')
 def write(parser, title, content, *paths):
     filename = path.join(root, *paths)
 
-    local_data = {'title': title, 'content': content, 'include_main_css': len(paths) > 2}
+    local_data = {'title': title, 'content': content}
     parser.data['local'] = local_data
 
     page = parser.evaluate(page_template)

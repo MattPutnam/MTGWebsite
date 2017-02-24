@@ -25,3 +25,12 @@
     {{if:condition=$show->Orchestra}}
     {{template:file=../templates/table.htmpl, header=Orchestra, content=$show->Orchestra}}{{end}}
 </div>
+
+<div id="photos_container">
+    {{with_local_resource:glob=photos/*, as=photo, all_files=True}}
+    <a href="photos/{{$photo}}" data-lightbox="production-photos"
+       data-title="{{if:condition=$show->Photo Credits->($photo)}}Photo credit: {{$show->Photo Credits->($photo)}}{{else}}{{if:condition=$show->Photo Credits->Global}}Photo credit: {{$show->Photo Credits->Global}}{{end}}{{end}}">
+        <img class="production_photo" src="photos/{{$photo}}" alt="" /></a>{{end}}
+</div>
+
+<script src="{{static_resource:file=js/lightbox-plus-jquery.min.js}}"></script>

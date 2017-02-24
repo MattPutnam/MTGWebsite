@@ -140,7 +140,21 @@ th {
 }
 /* end table stuff */
 
+/* production photo stuff */
+#photos_container {
+    padding: 2rem 5rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
 
+.production_photo {
+    height: auto;
+    width: auto;
+    max-height: 300px;
+    margin: 0 2px;
+}
+/* end production photo stuff */
 
 /* Show list stuff */
 .show_summary {

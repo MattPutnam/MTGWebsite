@@ -4,8 +4,8 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="description" content="The non-profit, student-run MIT Musical Theatre Guild is the oldest and largest theatre organization at MIT." />
-    {{if:condition=$local->include_main_css}}
-    <link type="text/css" href="{{static_resource:file=main.css}}" rel="stylesheet" />{{end}}
+    <link type="text/css" href="{{static_resource:file=style/main.css}}" rel="stylesheet" />
+    <link type="text/css" href="{{static_resource:file=style/lightbox.min.css}}" rel="stylesheet" />
     {{with_local_resource:glob=*.css, as=file, all_files=True}}
     <link type="text/css" href="{{$file}}" rel="stylesheet" />{{end}}
     <link type="image/png" href="{{static_resource:file=images/mtg-16.png}}" rel="icon" />

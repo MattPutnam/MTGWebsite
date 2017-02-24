@@ -49,11 +49,8 @@ def make_show_page(main_parser, year, season, is_current, is_future, show_list):
             graphic = 'images/comingsoon.jpg'
         else:
             graphic = 'images/placeholder.png'
-    banner = utils.find_show_file(dir_path, 'banner')
 
     show_data.update({'year': year, 'season': season, 'graphic': graphic})
-    if banner:
-        show_data['banner'] = banner
 
     main_parser.data['show'] = show_data
     show_parser = deepcopy(main_parser)

@@ -41,7 +41,7 @@ class Parser:
 
     def parse(self, string: str) -> list:
         result = []
-        tokens = re.split(macros.macro_pattern, string, re.DOTALL | re.MULTILINE)
+        tokens = re.split(macros.macro_pattern, string)
         while len(tokens) > 0:
             token, *tokens = tokens
             if token == '':
