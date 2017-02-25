@@ -11,6 +11,11 @@
         <section id="credits">{{$show->Credits}}</section>
         <section id="summary">{{$show->Summary}}</section>
         <section>{{template:file=../templates/venue.htmpl}}</section>
+        {{if:condition=$show->Reviews}}
+        <section id="reviews">
+            Reviews: {{foreach:var=src, source=$show->Reviews}}
+            <a href="{{$show->Reviews->($src)}}" target="_blank">{{$src}}</a>{{end}}
+        </section>{{end}}
     </div>
 </div>
 
