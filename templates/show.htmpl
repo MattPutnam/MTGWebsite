@@ -13,8 +13,10 @@
         <section>{{template:file=../templates/venue.htmpl}}</section>
         {{if:condition=$show->Reviews}}
         <section id="reviews">
-            Reviews: {{foreach:var=src, source=$show->Reviews}}
-            <a href="{{$show->Reviews->($src)}}" target="_blank">{{$src}}</a>{{end}}
+            Reviews:
+            <ul>{{foreach:var=src, source=$show->Reviews}}
+                <li><a href="{{$show->Reviews->($src)}}" target="_blank">{{$src}}</a></li>{{end}}
+            </ul>
         </section>{{end}}
     </div>
 </div>

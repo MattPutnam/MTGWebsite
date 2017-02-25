@@ -98,6 +98,26 @@ section {
 .performance_dates {
     font-weight: 600;
 }
+
+#reviews > ul {
+    display: inline;
+    padding-left: 10px;
+}
+
+#reviews > ul > li {
+    display: inline;
+}
+
+#reviews > ul > li:after {
+    content: '\00B7';
+    font-weight: 600;
+    margin: 0 6px 0 10px;
+}
+
+#reviews > ul > li:last-child:after {
+    content: ''
+}
+
 /* end show header stuff */
 
 /* Table stuff */
