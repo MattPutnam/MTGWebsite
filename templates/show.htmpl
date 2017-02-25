@@ -3,7 +3,7 @@
     <img src="{{$banner}}" alt="Show Banner" />
 </div>{{end}}
 
-<div id="show_header">
+<div id="show_header" class="{{with_local_resource:glob=banner.*, as=unused}}has_banner{{end}}">
     {{with_local_resource:glob=graphic.*, as=graphic}}
     <img src="{{$graphic}}" alt="Show Graphic" />{{end}}
     <div id="show_data">

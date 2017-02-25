@@ -49,16 +49,17 @@ body {
 
 /* banner stuff: */
 .show_banner {
-    padding: 0;
     border: none;
     margin: 0 -1rem;
     background-color: black;
 }
 
 .show_banner > img {
+    display: block;
     width: auto;
-    max-width: 100%;
     height: auto;
+    max-width: 100%;
+    max-height: 250px;
 }
 /* end banner stuff */
 
@@ -71,6 +72,10 @@ body {
 
 #show_header > img {
     margin-right: 1rem;
+}
+
+#show_header.has_banner > img {
+    display: none;
 }
 
 p {
