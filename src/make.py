@@ -1,4 +1,6 @@
 import collections
+import sys
+import time
 
 import yaml
 
@@ -22,6 +24,12 @@ yaml.add_constructor(_mapping_tag, dict_constructor)
 
 
 def main():
+    if len(sys.argv) != 2:
+        print_usage()
+        exit()
+
+    command = sys.argv[1]
+
     main_data = load_or_die('site', 'main.yaml')
     main_data['current_show_page'] = main_data['Current Show'] + '/show.html'
 
@@ -29,11 +37,29 @@ def main():
 
     parser = Parser({'main': main_data, 'venues': venue_data}, root + '/site', [])
 
-    render_index(parser)
-    render_about(parser)
-    shows.render_shows(parser, main_data['Current Show'].split('/'))
+    start_time = time.time()
 
-    print("Success!")
+    if command == 'all':
+        make_all(parser, main_data)
+    elif command == 'shows':
+        make_shows(parser, main_data)
+    elif command == 'about':
+        render_about(parser)
+    else:
+        print_usage()
+        exit()
+
+    print('Success!')
+    print('Completed in %s seconds' % (time.time() - start_time))
+
+
+def make_all(parser, main_data):
+    make_shows(parser, main_data)
+    render_about(parser)
+
+
+def make_shows(parser, main_data):
+    shows.render_shows(parser, main_data['Current Show'].split('/'))
 
 
 def render_about(parser):
@@ -47,6 +73,12 @@ def render_index(parser):
     rendered = parser.evaluate(index_template)
     with open('../site/index.html', 'w') as stream:
         stream.write(rendered)
+
+
+def print_usage():
+    print('usage: make.py all      # remake all files')
+    print('       make.py shows    # remake only the show pages')
+    print('       make.py about    # remake only the about page')
 
 
 if __name__ == '__main__':

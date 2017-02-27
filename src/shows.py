@@ -25,7 +25,7 @@ def render_shows(parser, current_show_tokens):
 
             cur_path = path.join(utils.root, 'site', year, season)
             if path.isdir(cur_path):
-                make_show_page(parser, year, season, is_current, is_future, show_list)
+                make_show_page(parser, cur_path, year, season, is_current, is_future, show_list)
 
     write(parser,
           'MTG - Show List',
@@ -33,15 +33,14 @@ def render_shows(parser, current_show_tokens):
           'site', 'show_list.html')
 
 
-def make_show_page(main_parser, year, season, is_current, is_future, show_list):
-    dir_path = path.join(utils.root, 'site', year, season)
-    yaml_path = path.join(dir_path, 'show.yaml')
+def make_show_page(main_parser, show_path, year, season, is_current, is_future, show_list):
+    yaml_path = path.join(show_path, 'show.yaml')
     if not path.isfile(yaml_path):
         return
 
     show_data = load_or_die(yaml_path)
 
-    graphic = utils.find_show_file(dir_path, 'graphic')
+    graphic = utils.find_show_file(show_path, 'graphic')
     if graphic:
         graphic = year + '/' + season + '/' + graphic
     else:
