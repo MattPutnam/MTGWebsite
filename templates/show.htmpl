@@ -40,4 +40,12 @@
 </div>
 {{with_local_resource:glob=photos/full/*, as=ignored}}{{comment: only load the lightbox js if there are photos}}
 <script src="{{static_resource:file=js/lightbox-plus-jquery.min.js}}"></script>
+<script>
+    lightbox.option({
+        'fadeDuration': 100,
+        'imageFadeDuration': 100,
+        'resizeDuration': 100,
+        'wrapAround': true
+    })
+</script>
 {{end}}
