@@ -181,6 +181,8 @@ th {
 
 /* Show list stuff */
 .show_summary {
+    display: flex;
+    align-items: flex-start;
     padding: 1rem;
     border-bottom: 1px solid #8A8B8C;
 }
@@ -205,8 +207,7 @@ th {
 }
 
 .summary_info {
-    display: inline-block;
-    vertical-align: top;
+    flex: 1 1 auto;
 }
 
 .summary_slot {
@@ -215,6 +216,7 @@ th {
 }
 
 .summary_title {
+    display: block;
     text-decoration: none;
     color: #A31F34;
     font-size: 150%;

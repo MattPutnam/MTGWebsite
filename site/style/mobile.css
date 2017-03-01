@@ -1,0 +1,32 @@
+body {
+    font-size: 125%;
+}
+
+#header {
+    text-align: center;;
+}
+
+#header_contents > .links {
+    display: block;
+}
+
+#header_contents > .links > .text_link {
+    display: inline-block;
+    width: 40%;
+    font-size: 150%;
+    padding: 1rem;
+    text-align: center;
+}
+
+#mitlogo {
+    display: none;
+}
+
+table {
+    width: calc(100% - 2rem);
+    font-size: 125%;
+}
+
+td {
+    width: 50%;
+}
