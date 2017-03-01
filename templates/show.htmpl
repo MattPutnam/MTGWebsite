@@ -3,41 +3,41 @@
     <img src="{{$banner}}" alt="Show Banner" />
 </div>{{end}}
 
-<div id="show_header" class="{{with_local_resource:glob=banner.*, as=unused}}has_banner{{end}}">
-    {{with_local_resource:glob=graphic.*, as=graphic}}
-    <img src="{{$graphic}}" alt="Show Graphic" />{{end}}
-    <div id="show_data">
-        <h1 id="title">{{$show->Title}}</h1>
-        <section id="credits">{{$show->Credits}}</section>
-        <section id="summary">{{$show->Summary}}</section>
-        <section>{{template:file=../templates/venue.htmpl}}</section>
-        {{if:condition=$show->Reviews}}
-        <section id="reviews">
-            Reviews:
-            <ul>{{foreach:var=src, source=$show->Reviews}}
-                <li><a href="{{$show->Reviews->($src)}}" target="_blank">{{$src}}</a></li>{{end}}
-            </ul>
-        </section>{{end}}
+<div class="page_content">
+    <div id="show_header" class="{{with_local_resource:glob=banner.*, as=unused}}has_banner{{end}}">
+        {{with_local_resource:glob=graphic.*, as=graphic}}
+        <img src="{{$graphic}}" alt="" />{{end}}
+        <div id="show_data">
+            <h1 id="title">{{$show->Title}}</h1>
+            <section id="credits">{{$show->Credits}}</section>
+            <section id="summary">{{$show->Summary}}</section>
+            <section>{{template:file=../templates/venue.htmpl}}</section>
+            {{if:condition=$show->Reviews}}
+            <section id="reviews">
+                Reviews:
+                <ul>{{foreach:var=src, source=$show->Reviews}}
+                    <li><a href="{{$show->Reviews->($src)}}" target="_blank">{{$src}}</a></li>{{end}}
+                </ul>
+            </section>{{end}}
+        </div>
+    </div>
+
+    <div id="show_personnel" class="table_container">
+        {{if:condition=$show->Production Staff}}
+        {{template:file=../templates/table.htmpl, header=Production Staff, content=$show->Production Staff}}{{end}}
+        {{if:condition=$show->Cast}}
+        {{template:file=../templates/table.htmpl, header=Cast, content=$show->Cast}}{{end}}
+        {{if:condition=$show->Orchestra}}
+        {{template:file=../templates/table.htmpl, header=Orchestra, content=$show->Orchestra}}{{end}}
+    </div>
+
+    <div id="photos_container">
+        {{with_local_resource:glob=photos/full/*, as=photo, all_files=True}}
+        <a href="photos/full/{{$photo}}" data-lightbox="production-photos"
+           data-title="{{template:file=../templates/credit_finder.htmpl, credits=$show->Photo Credits, photo=$photo}}">
+            <img class="production_photo" src="photos/thumbnails/{{eval('-thumb.'.join('$photo'.split('.')))}}" alt="" /></a>{{end}}
     </div>
 </div>
-
-<div id="show_personnel" class="table_container">
-    {{if:condition=$show->Production Staff}}
-    {{template:file=../templates/table.htmpl, header=Production Staff, content=$show->Production Staff}}{{end}}
-    {{if:condition=$show->Cast}}
-    {{template:file=../templates/table.htmpl, header=Cast, content=$show->Cast}}{{end}}
-    {{if:condition=$show->Orchestra}}
-    {{template:file=../templates/table.htmpl, header=Orchestra, content=$show->Orchestra}}{{end}}
-</div>
-
-<div id="photos_container">
-    {{with_local_resource:glob=photos/full/*, as=photo, all_files=True}}
-    <a href="photos/full/{{$photo}}" data-lightbox="production-photos"
-       data-title="{{template:file=../templates/credit_finder.htmpl, credits=$show->Photo Credits, photo=$photo}}">
-        <img class="production_photo" src="photos/thumbnails/{{eval('-thumb.'.join('$photo'.split('.')))}}" alt="" /></a>{{end}}
-</div>
-
-{{comment: only load the lightbox js if there are photos}}
-{{with_local_resource:glob=photos/full/*, as=ignored}}
+{{with_local_resource:glob=photos/full/*, as=ignored}}{{comment: only load the lightbox js if there are photos}}
 <script src="{{static_resource:file=js/lightbox-plus-jquery.min.js}}"></script>
 {{end}}

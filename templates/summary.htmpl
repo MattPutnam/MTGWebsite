@@ -1,4 +1,4 @@
-<div class="show_summary">
+<div class="show_summary {{if:condition=$show->is_current}}current_show{{end}}">
     <a class="summary_graphic" href="{{$show->year}}/{{$show->season}}/show.html">
         <img src="{{$show->graphic}}" />
     </a>

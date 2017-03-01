@@ -13,16 +13,20 @@
 </head>
 <body>
 <div id="header">
-    <img alt="MTG" class="mtglogo" src="{{static_resource:file=images/mtg-bg.png}}" />
-    <span class="links">
-        <a href="{{static_resource:file=$main->current_show_page}}">Current Show</a>
-        <a href="{{static_resource:file=show_list.html}}">Show List</a>
-        <a href="{{static_resource:file=about.html}}">About MTG</a>
-        <a href="{{static_resource:file=contact.html}}">Contact Us</a>
-        <a href="http://web.mit.edu/">
-            <img alt="MIT" class="mitlogo" src="{{static_resource:file=images/MIT_logo.svg}}" />
+    <div id="header_contents">
+        <a href="{{static_resource:file=$main->current_show_page}}">
+            <img alt="MTG" id="mtglogo" src="{{static_resource:file=images/mtg-bg.png}}" />
         </a>
-    </span>
+        <span class="links">
+            <a class="text_link" href="{{static_resource:file=$main->current_show_page}}">Current Show</a>
+            <a class="text_link" href="{{static_resource:file=show_list.html}}">Show List</a>
+            <a class="text_link" href="{{static_resource:file=about.html}}">About MTG</a>
+            <a class="text_link" href="{{static_resource:file=contact.html}}">Contact Us</a>
+            <a href="http://web.mit.edu/">
+                <img alt="MIT" id="mitlogo" src="{{static_resource:file=images/MIT_logo.svg}}" />
+            </a>
+        </span>
+    </div>
 </div>
 <div class="page">
     {{$local->content}}

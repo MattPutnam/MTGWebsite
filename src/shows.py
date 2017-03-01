@@ -29,7 +29,7 @@ def render_shows(parser, current_show_tokens):
 
     write(parser,
           'MTG - Show List',
-          "".join(show_list),
+          '<div class="page_content show_list">\n' + ''.join(show_list) + '\n</div>',
           'site', 'show_list.html')
 
 
@@ -49,7 +49,7 @@ def make_show_page(main_parser, show_path, year, season, is_current, is_future, 
         else:
             graphic = 'images/placeholder.png'
 
-    show_data.update({'year': year, 'season': season, 'graphic': graphic})
+    show_data.update({'year': year, 'season': season, 'graphic': graphic, 'is_current': is_current})
 
     main_parser.data['show'] = show_data
     show_parser = deepcopy(main_parser)

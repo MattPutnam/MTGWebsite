@@ -4,53 +4,63 @@ html {
 
 body {
     font-family: Arial;
-    background-color: #ccc;
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    margin: 0 auto;
+    margin: 0px;
 }
 
 /* Header Stuff: */
 #header {
     background-color: #ffcc99;
-    padding: .7rem;
-    border-bottom: 4px solid black;
+    border-bottom: 4px solid #444;
+}
+
+#header:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+#header_contents {
+    max-width: 1000px;
+    margin: auto;
+    padding: 0.7rem 0.5rem 0.3rem
 }
 
 #header a {
-    color: #555;
-    font-weight: bold;
-    margin: 0 0.5rem;
     text-decoration: none;
 }
 
-#header a:hover {
+#header .text_link {
+    color: #444;
+    font-weight: bold;
+    margin: 0 0.5rem;
+}
+
+#header .text_link:hover {
     text-decoration: underline;
 }
 
-.mtglogo {
-    width: 118px;
-    height: 60px;
+#mtglogo {
+    width: auto;
+    height: 36px;
     margin-right: 1rem;
 }
 
-.mitlogo {
+#mitlogo {
+    float: right;
     height: 36px;
     width: auto;
 }
 /* End Header stuff */
 
-.page {
-    padding: 0 1rem;
-    background-color: white;
-    flex: 1 1 auto;
+.page_content {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 1rem;
 }
 
 /* banner stuff: */
 .show_banner {
-    border: none;
-    margin: 0 -1rem;
     background-color: black;
 }
 
@@ -76,10 +86,6 @@ body {
 
 #show_header.has_banner > img {
     display: none;
-}
-
-p {
-    max-width: 975px;
 }
 
 section {
@@ -150,20 +156,10 @@ td.name {
     font-weight: 600;
 }
 
-td.name > a {
-    text-decoration: none;
-    color: black;
-}
-
-td.name > a:hover {
-    color: #993333;
-    text-decoration: underline;
-}
-
 th {
     text-align: center;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #8A8B8C;
 }
 /* end table stuff */
 
@@ -185,10 +181,21 @@ th {
 
 /* Show list stuff */
 .show_summary {
-    display: flex;
-    align-items: flex-start;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid black;
+    padding: 1rem;
+    border-bottom: 1px solid #8A8B8C;
+}
+
+.show_summary:last-child {
+    border-bottom: none;
+}
+
+.show_summary:hover {
+    background-color: #EEE
+}
+
+.show_summary.current_show {
+    border-left: 0.6rem solid #A31F34;
+    padding-left: 0.4rem;
 }
 
 .summary_graphic >img {
@@ -197,24 +204,25 @@ th {
     margin-right: 1rem;
 }
 
+.summary_info {
+    display: inline-block;
+    vertical-align: top;
+}
+
 .summary_slot {
     margin-bottom: 0.5rem;
-    color: #555;
+    color: #8A8B8C;
 }
 
 .summary_title {
     text-decoration: none;
-    color: #993333;
+    color: #A31F34;
     font-size: 150%;
 }
 
 .summary_credits {
     white-space: pre-wrap;
     margin: 0.7rem 0 1rem;
-}
-
-.summary_dates {
-    font-weight: bold;
 }
 
 .summary_performances {
@@ -232,7 +240,7 @@ th {
 }
 
 .summary_performances > a:hover {
-    color: #993333;
+    color: #A31F34;
     text-decoration: underline;
 }
 /* end show list stuff */
