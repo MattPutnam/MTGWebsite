@@ -64,6 +64,8 @@ class Parser:
                         result.append(macros.Variable(value))
                     elif value.startswith("blockcomment"):
                         result.append(macros.BlockComment())
+                    elif value == 'markdown':
+                        result.append(macros.Markdown())
                     else:
                         raise ValueError(f'Unable to parse macro {token}')
                 else:

@@ -3,6 +3,8 @@ import re
 from os import path
 from glob import glob
 
+import mistune
+
 
 END = '~~~END~~~'
 ELSE = '~~~ELSE~~~'
@@ -173,3 +175,15 @@ class BlockComment(Macro):
 
     def render(self, parser) -> str:
         return ''
+
+
+class Markdown(Macro):
+    def __init__(self):
+        super().__init__()
+        self.body = []
+
+    def is_block(self):
+        return True
+
+    def render(self, parser) -> str:
+        return mistune.markdown(parser.render_list(self.body))

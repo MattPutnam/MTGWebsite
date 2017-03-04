@@ -18,6 +18,6 @@
     </div>
     {{if:condition=$main->Announcement}}
     <h1 id="announcement_header">Announcements:</h1>
-    <div id="announcement_content">{{$main->Announcement}}</div>
+    <div id="announcement_content">{{markdown}}{{$main->Announcement}}{{end}}</div>
     {{end}}
 </div>

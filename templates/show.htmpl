@@ -10,7 +10,7 @@
         <div id="show_data">
             <h1 id="title">{{$show->Title}}</h1>
             <section id="credits">{{$show->Credits}}</section>
-            <section id="summary">{{$show->Summary}}</section>
+            <section id="summary">{{markdown}}{{$show->Summary}}{{end}}</section>
             <section>{{template:file=../templates/venue.htmpl}}</section>
             {{if:condition=$show->Reviews}}
             <section id="reviews">
