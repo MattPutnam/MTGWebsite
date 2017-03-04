@@ -1,7 +1,23 @@
-<!-- This file has been automatically generated -->
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
-<html>
-  <head>
-    <meta http-equiv="refresh" content="0; url='{{$main->current_show_page}}'" />
-  </head>
-</html>
+<div class="page_content index">
+    <h1 id="now_showing">Now Showing:</h1>
+
+    {{template:file=../templates/summary.htmpl}}
+
+    <div id="ticket_info">
+        <div>Tickets are:</div>
+        <table id="ticket_table">{{foreach:source=$tickets->Prices, var=entry}}
+            <tr>
+                <td class="price">{{$tickets->Prices->($entry)}}</td>
+                <td class="group">{{$entry}}</td>
+            </tr>{{end}}
+        </table>
+        <div id="ticket_extra">{{$tickets->Extra Info}}</div>
+        {{if:condition=$main->Reservations Open?}}
+        <a id="reservations_link" href="{{$main->Reservations URL}}">Reserve tickets online</a>
+        {{end}}
+    </div>
+    {{if:condition=$main->Announcement}}
+    <h1 id="announcement_header">Announcements:</h1>
+    <div id="announcement_content">{{$main->Announcement}}</div>
+    {{end}}
+</div>

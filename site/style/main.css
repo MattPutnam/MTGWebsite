@@ -8,6 +8,49 @@ body {
     margin: 0px;
 }
 
+/* Index page: */
+.page_content.index h1 {
+    color: #444
+}
+
+.page_content.index > .show_summary {
+    background-color: white;
+    border-bottom: none;
+    padding: 0;
+}
+
+.page_content.index .summary_slot {
+    display: none;
+}
+
+#ticket_info {
+    margin-top: 1rem;
+}
+
+#ticket_table {
+    float: none;
+    width: 900px;
+}
+
+#ticket_table td {
+    min-width: inherit;
+    max-width: inherit;
+}
+
+#ticket_table td.price {
+    text-align: right;
+}
+
+#ticket_extra {
+    margin: 1rem 0;
+}
+
+#reservations_link {
+    font-size: 120%;
+    color: #A31F34;
+}
+/* end index page */
+
 /* Header Stuff: */
 #header {
     background-color: #ffcc99;

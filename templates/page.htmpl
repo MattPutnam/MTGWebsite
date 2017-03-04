@@ -15,7 +15,7 @@
 <body>
 <div id="header">
     <div id="header_contents">
-        <a href="{{static_resource:file=$main->current_show_page}}">
+        <a href="{{static_resource:file=index.html}}">
             <img alt="MTG" id="mtglogo" src="{{static_resource:file=images/mtg-bg.png}}" />
         </a>
         <span class="links">

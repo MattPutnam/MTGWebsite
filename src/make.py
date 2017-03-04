@@ -1,6 +1,7 @@
 import collections
 import sys
 import time
+from copy import deepcopy
 
 import yaml
 
@@ -24,6 +25,8 @@ yaml.add_constructor(_mapping_tag, dict_constructor)
 
 
 def main():
+    start_time = time.time()
+
     if len(sys.argv) != 2:
         print_usage()
         exit()
@@ -34,15 +37,16 @@ def main():
     main_data['current_show_page'] = main_data['Current Show'] + '/show.html'
 
     venue_data = load_or_die('site', 'venues.yaml')
+    ticket_data = load_or_die('site', 'tickets.yaml')
 
-    parser = Parser({'main': main_data, 'venues': venue_data}, root + '/site', [])
+    data = {'main': main_data, 'venues': venue_data, 'tickets': ticket_data}
 
-    start_time = time.time()
+    parser = Parser(data, root + '/site', [])
 
     if command == 'all':
-        make_all(parser, main_data)
+        make_all(parser, data)
     elif command == 'shows':
-        make_shows(parser, main_data)
+        make_shows(parser, data)
     elif command == 'about':
         render_about(parser)
     else:
@@ -53,13 +57,14 @@ def main():
     print('Completed in %s seconds' % (time.time() - start_time))
 
 
-def make_all(parser, main_data):
-    make_shows(parser, main_data)
+def make_all(parser, data):
+    render_index(parser, data)
+    make_shows(parser, data)
     render_about(parser)
 
 
-def make_shows(parser, main_data):
-    shows.render_shows(parser, main_data['Current Show'].split('/'))
+def make_shows(parser, data):
+    shows.render_shows(parser, data['main']['Current Show'].split('/'))
 
 
 def render_about(parser):
@@ -68,11 +73,20 @@ def render_about(parser):
     write(parser, 'MTG - About MTG', rendered, 'site', 'about.html')
 
 
-def render_index(parser):
+def render_index(parser, data):
     index_template = load_or_die('templates', 'index.htmpl')
-    rendered = parser.evaluate(index_template)
-    with open('../site/index.html', 'w') as stream:
-        stream.write(rendered)
+    year, season = data['main']['Current Show'].split('/')
+
+    graphic = shows.get_show_graphic(year, season, is_current=True)
+
+    current_show_data = load_or_die('site', year, season, 'show.yaml')
+    current_show_data.update({'year': year, 'season': season, 'graphic': graphic})
+
+    index_parser = deepcopy(parser)
+    index_parser.data['show'] = current_show_data
+
+    rendered = index_parser.evaluate(index_template)
+    write(index_parser, 'MIT Musical Theatre Guild', rendered, 'site', 'index.html')
 
 
 def print_usage():

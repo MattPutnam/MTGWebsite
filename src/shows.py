@@ -33,21 +33,24 @@ def render_shows(parser, current_show_tokens):
           'site', 'show_list.html')
 
 
+def get_show_graphic(year, season, is_current=False, is_future=False):
+    graphic = utils.find_show_file(path.join(utils.root, 'site', year, season), 'graphic')
+    if graphic:
+        return year + '/' + season + '/' + graphic
+    else:
+        if is_current or is_future:
+            return 'images/comingsoon.jpg'
+        else:
+            return 'images/placeholder.png'
+
+
 def make_show_page(main_parser, show_path, year, season, is_current, is_future, show_list):
     yaml_path = path.join(show_path, 'show.yaml')
     if not path.isfile(yaml_path):
         return
 
     show_data = load_or_die(yaml_path)
-
-    graphic = utils.find_show_file(show_path, 'graphic')
-    if graphic:
-        graphic = year + '/' + season + '/' + graphic
-    else:
-        if is_current or is_future:
-            graphic = 'images/comingsoon.jpg'
-        else:
-            graphic = 'images/placeholder.png'
+    graphic = get_show_graphic(year, season, is_current, is_future)
 
     show_data.update({'year': year, 'season': season, 'graphic': graphic, 'is_current': is_current})
 
