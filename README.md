@@ -22,6 +22,10 @@ Dates: TBA
 Venue: KLT
 ```
 
+##### Round 1/Round 2/Auditions are happening
+
+Put an "Announcements" section in `main.yaml` and it will show up on the homepage
+
 ##### Prodstaff/Cast/Orchestra have been picked
 
 Add them to `show.yaml`.  Names must be "Production Staff", "Cast", and "Orchestra" exactly.  Example:
@@ -66,8 +70,11 @@ Change `Current Show:` in `main.yaml`.
 
 Todos:
 
-* General announcements/ticket reservations for current show page
-* Do something for reservations, probably a switch in `main.yaml` that creates a link to our existing system
 * Link people across shows like the G&S website?
 * Add hook to automatically run `make.py`.
 * Add parameters to `make.py` to build only certain pages
+
+# Technical notes
+
+The parser uses [mistune](https://github.com/lepture/mistune) for Markdown rendering.
+The site uses PyYAML (included in Python3) to parse yaml files.
