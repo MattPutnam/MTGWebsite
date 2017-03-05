@@ -35,6 +35,7 @@ def main():
 
     main_data = load_or_die('site', 'main.yaml')
     main_data['current_show_page'] = main_data['Current Show'] + '/show.html'
+    shows.current_year, shows.current_season = main_data['Current Show'].split('/')
 
     venue_data = load_or_die('site', 'venues.yaml')
     ticket_data = load_or_die('site', 'tickets.yaml')
@@ -46,7 +47,7 @@ def main():
     if command == 'all':
         make_all(parser, data)
     elif command == 'shows':
-        make_shows(parser, data)
+        make_shows(parser)
     elif command == 'about':
         render_about(parser)
     else:
@@ -59,12 +60,12 @@ def main():
 
 def make_all(parser, data):
     render_index(parser, data)
-    make_shows(parser, data)
+    make_shows(parser)
     render_about(parser)
 
 
-def make_shows(parser, data):
-    shows.render_shows(parser, data['main']['Current Show'].split('/'))
+def make_shows(parser):
+    shows.render_all_show_pages(parser)
 
 
 def render_about(parser):
@@ -77,7 +78,7 @@ def render_index(parser, data):
     index_template = load_or_die('templates', 'index.htmpl')
     year, season = data['main']['Current Show'].split('/')
 
-    graphic = shows.get_show_graphic(year, season, is_current=True)
+    graphic = shows.get_show_graphic(year, season)
 
     current_show_data = load_or_die('site', year, season, 'show.yaml')
     current_show_data.update({'year': year, 'season': season, 'graphic': graphic})
