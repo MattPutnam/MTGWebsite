@@ -7,6 +7,7 @@ from utils import load_or_die, write
 
 show_template = load_or_die('templates', 'show.htmpl')
 summary_template = load_or_die('templates', 'summary.htmpl')
+show_list_template = load_or_die('templates', 'show_list.htmpl')
 
 seasons = ['IAP', 'Spring', 'Summer', 'Fall']
 
@@ -77,9 +78,12 @@ def make_show_list(parser):
             show_parser.data['show'] = show_data
             show_summaries.append(show_parser.evaluate(summary_template))
 
-    write(show_parser,
+    show_list_parser = deepcopy(parser)
+    show_list_parser.data['show_list'] = show_summaries
+
+    write(show_list_parser,
           'MTG - Show List',
-          '\n'.join(show_summaries),
+          show_list_parser.evaluate(show_list_template),
           'site', 'show_list.html')
 
 

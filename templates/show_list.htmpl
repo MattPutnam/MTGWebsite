@@ -1,0 +1,3 @@
+<div class="page_content">{{foreach:source=$show_list, var=show}}
+    {{$show}}{{end}}
+</div>

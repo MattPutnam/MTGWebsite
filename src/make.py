@@ -66,6 +66,7 @@ def make_all(parser, data):
 
 def make_shows(parser):
     shows.render_all_show_pages(parser)
+    shows.make_show_list(parser)
 
 
 def render_about(parser):
