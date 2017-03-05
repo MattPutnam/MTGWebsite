@@ -115,6 +115,9 @@ class Eval(Macro):
             expr = expr.replace(variable, str(parser.resolve_variable(variable)))
         return str(eval(expr))
 
+    def __repr__(self):
+        return 'eval(' + self.expression + ')'
+
 
 class Template(Macro):
     def __init__(self, data: dict):
@@ -131,6 +134,9 @@ class Template(Macro):
         with open(self.file) as stream:
             contents = stream.read()
             return parser.evaluate(contents)
+
+    def __repr__(self):
+        return 'Template[' + self.file + ']'
 
 
 class WithLocalResource(Macro):
@@ -164,6 +170,9 @@ class WithLocalResource(Macro):
         else:
             return ''
 
+    def __repr__(self):
+        return 'WithLocalResource[' + self.pattern + ']'
+
 
 class BlockComment(Macro):
     def __init__(self):
@@ -176,6 +185,9 @@ class BlockComment(Macro):
     def render(self, parser) -> str:
         return ''
 
+    def __repr__(self):
+        return 'BlockComment'
+
 
 class Markdown(Macro):
     def __init__(self):
@@ -187,3 +199,6 @@ class Markdown(Macro):
 
     def render(self, parser) -> str:
         return mistune.markdown(parser.render_list(self.body))
+
+    def __repr__(self):
+        return 'Markdown'
