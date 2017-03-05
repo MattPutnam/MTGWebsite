@@ -90,8 +90,8 @@ class Parser:
             assert set(data) == {'file'}
             return macros.StaticResource(data['file'])
         elif name == 'if':
-            assert set(data) == {'condition'}
-            return macros.If(data['condition'])
+            assert set(data) >= {'condition'}
+            return macros.If(data['condition'], binding=data.get('as'))
         elif name == 'template':
             assert set(data) >= {'file'}
             return macros.Template(data)

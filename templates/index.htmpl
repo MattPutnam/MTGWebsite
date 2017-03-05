@@ -16,8 +16,8 @@
         <a id="reservations_link" href="{{$main->Reservations URL}}">Reserve tickets online</a>
         {{end}}
     </div>
-    {{if:condition=$main->Announcement}}
+    {{if:condition=$main->Announcement, as=announcement}}
     <h1 id="announcement_header">Announcements:</h1>
-    <div id="announcement_content">{{markdown}}{{$main->Announcement}}{{end}}</div>
+    <div id="announcement_content">{{markdown}}{{$announcement}}{{end}}</div>
     {{end}}
 </div>

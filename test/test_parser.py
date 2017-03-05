@@ -105,6 +105,12 @@ class ParserTest(unittest.TestCase):
              expected='',
              data={'foo': {'hello': None}})
 
+    def test_if_with_as(self):
+        test(self,
+             template='{{if:condition=$foo->bar->baz, as=temp}}{{$temp}}{{end}}',
+             expected='hello',
+             data={'foo': {'bar': {'baz': 'hello'}}})
+
     def test_eval_no_vars(self):
         test(self,
              template='abc {{eval(2 + 2)}} xyz',

@@ -1,1 +1,1 @@
-{{if:condition=$credits->($photo)}}Photo credit: {{$credits->($photo)}}{{else}}{{if:condition=$credits->Global}}Photo credit: {{$credits->Global}}{{end}}{{end}}
+{{if:condition=$credits->($photo), as=name}}Photo credit: {{$name}}{{else}}{{if:condition=$credits->Global, as=global}}Photo credit: {{$global}}{{end}}{{end}}

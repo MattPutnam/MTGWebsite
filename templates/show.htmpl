@@ -12,11 +12,11 @@
             <section id="credits">{{$show->Credits}}</section>
             <section id="summary">{{markdown}}{{$show->Summary}}{{end}}</section>
             <section>{{template:file=../templates/venue.htmpl}}</section>
-            {{if:condition=$show->Reviews}}
+            {{if:condition=$show->Reviews, as=reviews}}
             <section id="reviews">
                 Reviews:
-                <ul>{{foreach:var=src, source=$show->Reviews}}
-                    <li><a href="{{$show->Reviews->($src)}}" target="_blank">{{$src}}</a></li>{{end}}
+                <ul>{{foreach:var=src, source=$reviews}}
+                    <li><a href="{{$reviews->($src)}}" target="_blank">{{$src}}</a></li>{{end}}
                 </ul>
             </section>{{end}}
         </div>

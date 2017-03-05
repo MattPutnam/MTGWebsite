@@ -75,15 +75,24 @@ class StaticResource(Macro):
 
 
 class If(Macro):
-    def __init__(self, condition: str):
+    def __init__(self, condition: str, binding=None):
         super().__init__()
         self.condition = condition
+        self.binding = binding
         self.body = []
 
     def is_block(self):
         return True
 
     def render(self, parser) -> str:
+        resolved = parser.resolve_variable(self.condition)
+
+        if self.binding:
+            local_parser = deepcopy(parser)
+            local_parser.data[self.binding] = resolved
+        else:
+            local_parser = parser
+
         if ELSE in self.body:
             else_index = self.body.index(ELSE)
             body_true = self.body[:else_index]
@@ -92,12 +101,12 @@ class If(Macro):
             body_true = self.body
             body_false = []
 
-        if self.condition[0] != '$' or parser.resolve_variable(self.condition, throw=False):
+        if self.condition[0] != '$' or resolved:
             body = body_true
         else:
             body = body_false
 
-        return ''.join(parser.render_list(body))
+        return ''.join(local_parser.render_list(body))
 
     def __repr__(self):
         return 'If[' + self.condition + '] {' + str(self.body) + '}'
