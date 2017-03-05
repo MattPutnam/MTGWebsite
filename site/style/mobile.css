@@ -30,3 +30,11 @@ table {
 td {
     width: 50%;
 }
+
+td.price {
+    width: 10%;
+}
+
+td.group {
+    width: 90%
+}

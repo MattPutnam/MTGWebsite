@@ -15,8 +15,8 @@ body {
 
 .page_content.index > .show_summary {
     background-color: white;
-    border-bottom: none;
-    padding: 0;
+    border: 1px solid #444;
+    border-radius: 4px;
 }
 
 .page_content.index .summary_slot {
@@ -244,6 +244,7 @@ th {
 }
 
 .summary_graphic >img {
+    display: block;
     width: 130px;
     height: auto;
     margin-right: 1rem;
