@@ -66,6 +66,7 @@ def make_all(parser, data):
     make_shows(parser)
     render_about(parser)
     render_directions(parser)
+    render_faq(parser)
 
 
 def make_shows(parser):
@@ -99,6 +100,12 @@ def render_directions(parser):
     directions_template = load_or_die('templates', 'directions.htmpl')
     rendered = parser.evaluate(directions_template)
     write(parser, 'MTG - Directions', rendered, 'site', 'directions.html')
+
+
+def render_faq(parser):
+    faq_template = load_or_die('templates', 'faq.htmpl')
+    rendered = parser.evaluate(faq_template)
+    write(parser, 'MTG - Frequently Asked Questions', rendered, 'site', 'faq.html')
 
 
 def print_usage():

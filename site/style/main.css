@@ -8,7 +8,7 @@ body {
     margin: 0px;
 }
 
-h1 {
+h1, h2 {
     color: #444
 }
 
@@ -47,11 +47,11 @@ h1 {
 
 #reservations_link {
     display: inline-block;
-    padding: 1rem;
+    padding: 1rem 1.7rem;
     font-size: 120%;
     text-decoration: none;
     background-color: #A31F34;
-    color: #8A8B8C;
+    color: lightgray;
     border-radius: 8px;
 }
 
