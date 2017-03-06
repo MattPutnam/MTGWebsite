@@ -14,6 +14,7 @@
         <div id="ticket_extra">{{$tickets->Extra Info}}</div>
         {{if:condition=$main->Reservations Open?}}
         <a id="reservations_link" href="{{$main->Reservations URL}}">Reserve tickets online</a>
+        <a id="directions_link" href="directions.html">Directions to the theater</a>
         {{end}}
     </div>
     {{if:condition=$main->Announcement, as=announcement}}

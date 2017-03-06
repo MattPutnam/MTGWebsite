@@ -35,12 +35,15 @@ def main():
 
     main_data = load_or_die('site', 'main.yaml')
     main_data['current_show_page'] = main_data['Current Show'] + '/show.html'
-    shows.current_year, shows.current_season = main_data['Current Show'].split('/')
 
-    venue_data = load_or_die('site', 'venues.yaml')
-    ticket_data = load_or_die('site', 'tickets.yaml')
+    current_year, current_season = main_data['Current Show'].split('/')
+    shows.current_year = current_year
+    shows.current_season = current_season
 
-    data = {'main': main_data, 'venues': venue_data, 'tickets': ticket_data}
+    data = {'main': main_data,
+            'current': load_or_die('site', current_year, current_season, 'show.yaml'),
+            'venues': load_or_die('site', 'venues.yaml'),
+            'tickets': load_or_die('site', 'tickets.yaml')}
 
     parser = Parser(data, root + '/site', [])
 
@@ -62,6 +65,7 @@ def make_all(parser, data):
     render_index(parser, data)
     make_shows(parser)
     render_about(parser)
+    render_directions(parser)
 
 
 def make_shows(parser):
@@ -89,6 +93,12 @@ def render_index(parser, data):
 
     rendered = index_parser.evaluate(index_template)
     write(index_parser, 'MIT Musical Theatre Guild', rendered, 'site', 'index.html')
+
+
+def render_directions(parser):
+    directions_template = load_or_die('templates', 'directions.htmpl')
+    rendered = parser.evaluate(directions_template)
+    write(parser, 'MTG - Directions', rendered, 'site', 'directions.html')
 
 
 def print_usage():

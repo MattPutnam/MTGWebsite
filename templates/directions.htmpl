@@ -1,0 +1,33 @@
+<div class="page_content directions">
+    <h1>Directions to MTG's Performances</h1>
+
+    <p>
+        Our current show, <a id="current_show" href="{{$main->current_show_page}}">{{$current->Title}}</a>, is in
+        <a href="{{$venues->($current->Venue)->Location}}" target="_blank">{{$venues->($current->Venue)->Full Name}}</a>.
+    </p>
+
+    <p>Google Maps approximate location:</p>
+    {{$venues->($current->Venue)->Google Map}}
+
+    <h2>Getting to us by T</h2>
+
+    <p>
+        The theater is accessible via the 1/CT1 bus, or the Kendall or Central stops on the Red Line.  Visit the
+        <a href="{{$venues->($current->Venue)->MBTA}}">MBTA rider tools</a> for more info.
+    </p>
+
+    <h2>Parking</h2>
+
+    <p>
+        For our shows, you can often find parking on Massachusetts Avenue, Vassar Street, or Albany Street (one block
+        north of Vassar). Metered spaces are usually only in effect until 6pm on weeknights and Saturdays, and are free on Sundays.
+    </p>
+
+    <p>
+        MIT makes some lots available for visitors after 5pm, and lists them on an
+        <a href="http://web.mit.edu/facilities/transportation/parking/visitors/public_parking.html">MIT Parking and Transportation web page.</a>
+        Your best possibilities are either the West Annex, located on Vassar just west of the garage, or East Lot, located at
+        the corner of Vassar and Main. There is also a small for-pay lot at the corner of Mass Ave and Vassar St, and a garage
+        next to the Le Meridien hotel just off of Mass Ave about four blocks north of MIT.
+    </p>
+</div>

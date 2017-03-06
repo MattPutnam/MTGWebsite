@@ -8,11 +8,11 @@ body {
     margin: 0px;
 }
 
-/* Index page: */
-.page_content.index h1 {
+h1 {
     color: #444
 }
 
+/* Index page: */
 .page_content.index > .show_summary {
     background-color: white;
     border: 1px solid #444;
@@ -46,8 +46,18 @@ body {
 }
 
 #reservations_link {
+    display: inline-block;
+    padding: 1rem;
     font-size: 120%;
-    color: #A31F34;
+    text-decoration: none;
+    background-color: #A31F34;
+    color: #8A8B8C;
+    border-radius: 8px;
+}
+
+#directions_link {
+    display: block;
+    margin-top: 1rem;
 }
 /* end index page */
 
