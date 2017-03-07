@@ -12,6 +12,10 @@ h1, h2 {
     color: #444
 }
 
+a {
+    color: #A31F34
+}
+
 /* Index page: */
 .page_content.index > .show_summary {
     background-color: white;
@@ -60,6 +64,23 @@ h1, h2 {
     margin-top: 1rem;
 }
 /* end index page */
+
+/* FAQ page */
+.page_content.faq h2 {
+    font-size: 120%;
+}
+
+.page_content.faq p {
+    margin-left: 1rem;
+}
+/* end FAQ page */
+
+/* Contact page */
+.page_content.contact #address {
+    white-space: pre-line;
+    margin-top: -1rem;
+}
+/* end Contact page
 
 /* Header Stuff: */
 #header {
