@@ -67,6 +67,7 @@ def make_all(parser, data):
     render_about(parser)
     render_directions(parser)
     render_faq(parser)
+    render_contact(parser)
 
 
 def make_shows(parser):
@@ -106,6 +107,12 @@ def render_faq(parser):
     faq_template = load_or_die('templates', 'faq.htmpl')
     rendered = parser.evaluate(faq_template)
     write(parser, 'MTG - Frequently Asked Questions', rendered, 'site', 'faq.html')
+
+
+def render_contact(parser):
+    contact_template = load_or_die('templates', 'contact.htmpl')
+    rendered = parser.evaluate(contact_template)
+    write(parser, 'MTG - Contact Us', rendered, 'site', 'contact.html')
 
 
 def print_usage():

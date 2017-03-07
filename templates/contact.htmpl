@@ -1,0 +1,27 @@
+<div class="page_content contact">
+    <h1>Contact Us</h1>
+
+    <p>
+        If our <a href="faq.html">frequently asked questions</a> doesn't answer your question, you can
+        <a href="mailto:mtg-board@mit.edu">email the managing board</a>.
+    </p>
+    {{if:condition=$current->Contact Email, as=email}}
+    <p>
+        For questions related to our current show, {{$current->Title}}, contact the
+        <a href="mailto:{{$email}}">production staff</a>.
+    </p>
+    {{end}}
+    <h2>Office Location:</h2>
+
+    <p><a href="http://whereis.mit.edu/?go=W20" target="_blank">W20-453</a></p>
+
+    <h2>Mailing and Shipping Address:</h2>
+
+    <div id="address">
+        MIT Musical Theatre Guild
+        c/o SAO
+        W20-549
+        84 Massachusetts Avenue
+        Cambridge, MA 02139
+    </div>
+</div>
