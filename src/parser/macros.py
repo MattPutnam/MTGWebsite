@@ -207,7 +207,10 @@ class Markdown(Macro):
         return True
 
     def render(self, parser) -> str:
-        return mistune.markdown(parser.render_list(self.body))
+        # leading spaces cause mistune to think it's preformatted code:
+        rendered = parser.render_list(self.body)
+        rendered = '\n'.join(map(lambda s: s.strip(), rendered.split('\n')))
+        return mistune.markdown(rendered)
 
     def __repr__(self):
         return 'Markdown'
