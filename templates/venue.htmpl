@@ -1,2 +1,1 @@
-Performances <span class="performance_dates">{{$show->Performance Dates}}</span>
-in <a href="{{$venues->($show->Venue)->Location}}" target="_blank">{{$venues->($show->Venue)->Full Name}}</a>
+Performances <span class="performance_dates">{{$show->Performance Dates}}</span> in {{$venues->($show->Venue)->Full Name}}
