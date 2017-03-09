@@ -179,6 +179,10 @@ section {
     font-weight: 600;
 }
 
+#reservations {
+    margin-top: 0.75rem;
+}
+
 #reviews > ul {
     display: inline;
     padding-left: 10px;

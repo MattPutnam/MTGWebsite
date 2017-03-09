@@ -11,7 +11,12 @@
             <h1 id="title">{{$show->Title}}</h1>
             <section id="credits">{{$show->Credits}}</section>
             <section id="summary">{{markdown}}{{$show->Summary}}{{end}}</section>
-            <section>{{template:file=../templates/venue.htmpl}}{{if:condition=$show->is_current}} &mdash; <a href="{{static_resource:file=directions.html}}">Directions</a>{{end}}
+            <section>{{template:file=../templates/venue.htmpl}}
+                {{if:condition=$show->is_current}} &mdash; <a href="{{static_resource:file=directions.html}}">Directions</a>
+                    {{if:condition=$main->Reservations Open?}}
+                        <div id="reservations">Reservations are open! See our <a href="{{static_resource:file=index.html}}">home page</a> for ticket information.</div>
+                    {{end}}
+                {{end}}
             </section>
             {{if:condition=$show->Reviews, as=reviews}}
             <section id="reviews">
