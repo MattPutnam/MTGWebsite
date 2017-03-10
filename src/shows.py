@@ -5,9 +5,11 @@ from os import listdir, path
 import utils
 from utils import load_or_die, write
 
-show_template = load_or_die('templates', 'show.htmpl')
-summary_template = load_or_die('templates', 'summary.htmpl')
-show_list_template = load_or_die('templates', 'show_list.htmpl')
+from parser import compile_template
+
+compiled_show_template = compile_template(load_or_die('templates', 'show.htmpl'))
+compiled_summary_template = compile_template(load_or_die('templates', 'summary.htmpl'))
+compiled_show_list_template = compile_template(load_or_die('templates', 'show_list.htmpl'))
 
 seasons = ['IAP', 'Spring', 'Summer', 'Fall']
 
@@ -15,10 +17,10 @@ current_year = 0
 current_season = ''
 
 
-def render_show_page(main_parser, year, season):
+def render_show_page(main_data, year, season):
     """
     Renders the show page for a given slot, if it exists
-    :param main_parser: the main Parser instance
+    :param main_data: the main TemplateData instance
     :param year: the year to target
     :param season: the season to target
     :return: empty
@@ -27,41 +29,41 @@ def render_show_page(main_parser, year, season):
     if not path.isfile(yaml_path):
         return
 
-    graphic = get_show_graphic(year, season)
-    is_current = year == current_year and season == current_season
-
     show_data = load_or_die(yaml_path)
-    show_data.update({'year': year, 'season': season, 'graphic': graphic, 'is_current': is_current})
+    show_data.update({'year': year,
+                      'season': season,
+                      'graphic': get_show_graphic(year, season),
+                      'is_current': year == current_year and season == current_season})
 
-    show_parser = deepcopy(main_parser)
-    show_parser.data['show'] = show_data
-    show_parser.path=[year, season]
+    show_template_data = deepcopy(main_data)
+    show_template_data.bind('show', show_data)
+    show_template_data.path = [year, season]
 
-    rendered = show_parser.evaluate(show_template)
-    write(show_parser,
+    rendered = compiled_show_template.evaluate(show_template_data)
+    write(show_template_data,
           'MTG - ' + show_data['Title'] + ' (' + year + ")",
           rendered,
           'site', year, season, 'show.html')
 
 
-def render_all_show_pages(parser):
+def render_all_show_pages(main_data):
     """
     Renders all show pages that have a year/season/show.yaml defined
-    :param parser: the main Parser instance
+    :param main_data: the main TemplateData instance
     :return: empty
     """
     for year in get_defined_years():
         for season in reversed(seasons):
-            render_show_page(parser, year, season)
+            render_show_page(main_data, year, season)
 
 
-def make_show_list(parser):
+def make_show_list(main_data):
     """
     Renders the show list page
-    :param parser: the main Parser instance
+    :param main_data: the main TemplateData instance
     :return: empty
     """
-    show_parser = deepcopy(parser)
+    show_template_data = deepcopy(main_data)
     show_summaries = []
 
     for year in get_defined_years():
@@ -75,15 +77,15 @@ def make_show_list(parser):
             is_current = year == current_year and season == current_season
             show_data.update({'year': year, 'season': season, 'graphic': graphic, 'is_current': is_current})
 
-            show_parser.data['show'] = show_data
-            show_summaries.append(show_parser.evaluate(summary_template))
+            show_template_data.bind('show', show_data)
+            show_summaries.append(compiled_summary_template.evaluate(show_template_data))
 
-    show_list_parser = deepcopy(parser)
-    show_list_parser.data['show_list'] = show_summaries
+    show_list_data = deepcopy(main_data)
+    show_list_data.bind('show_list', show_summaries)
 
-    write(show_list_parser,
+    write(show_list_data,
           'MTG - Show List',
-          show_list_parser.evaluate(show_list_template),
+          compiled_show_list_template.evaluate(show_list_data),
           'site', 'show_list.html')
 
 

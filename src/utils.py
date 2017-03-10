@@ -1,6 +1,8 @@
 from fnmatch import fnmatch
 from os import path, listdir
 
+from parser import compile_template
+
 import yaml
 
 
@@ -18,22 +20,18 @@ def load_or_die(*paths):
                 print(e)
                 exit(-1)
     else:
-        file = open(filename)
-        return file.read()
+        with open(filename) as stream:
+            return stream.read()
 
 
-page_template = load_or_die('templates', 'page.htmpl')
+compiled_page_template = compile_template(load_or_die('templates', 'page.htmpl'))
 
 
-def write(parser, title, content, *paths):
-    filename = path.join(root, *paths)
+def write(template_data, title, content, *paths):
+    template_data.bind('local', {'title': title, 'content': content})
+    page = compiled_page_template.evaluate(template_data)
 
-    local_data = {'title': title, 'content': content}
-    parser.data['local'] = local_data
-
-    page = parser.evaluate(page_template)
-
-    with open(filename, 'w') as stream:
+    with open(path.join(root, *paths), 'w') as stream:
         stream.write(page)
 
 

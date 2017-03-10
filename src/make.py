@@ -6,7 +6,7 @@ from copy import deepcopy
 import yaml
 
 import shows
-from parser.parser import Parser
+from parser import TemplateData, evaluate_template
 from utils import load_or_die, write, root
 
 # Setup yaml importer to use OrderedDict
@@ -45,14 +45,14 @@ def main():
             'venues': load_or_die('site', 'venues.yaml'),
             'tickets': load_or_die('site', 'tickets.yaml')}
 
-    parser = Parser(data, root + '/site', [])
+    template_data = TemplateData(data, root + '/site', [])
 
     if command == 'all':
-        make_all(parser, data)
+        make_all(template_data)
     elif command == 'shows':
-        make_shows(parser)
+        make_shows(template_data)
     elif command == 'about':
-        render_about(parser)
+        render_about(template_data)
     else:
         print_usage()
         exit()
@@ -61,58 +61,58 @@ def main():
     print('Completed in %s seconds' % (time.time() - start_time))
 
 
-def make_all(parser, data):
-    render_index(parser, data)
-    make_shows(parser)
-    render_about(parser)
-    render_directions(parser)
-    render_faq(parser)
-    render_contact(parser)
+def make_all(template_data):
+    render_index(template_data)
+    make_shows(template_data)
+    render_about(template_data)
+    render_directions(template_data)
+    render_faq(template_data)
+    render_contact(template_data)
 
 
-def make_shows(parser):
-    shows.render_all_show_pages(parser)
-    shows.make_show_list(parser)
+def make_shows(template_data):
+    shows.render_all_show_pages(template_data)
+    shows.make_show_list(template_data)
 
 
-def render_about(parser):
+def render_about(template_data):
     about_template = load_or_die('templates', 'about.htmpl')
-    rendered = parser.evaluate(about_template)
-    write(parser, 'MTG - About MTG', rendered, 'site', 'about.html')
+    rendered = evaluate_template(about_template, template_data)
+    write(template_data, 'MTG - About MTG', rendered, 'site', 'about.html')
 
 
-def render_index(parser, data):
+def render_index(template_data):
     index_template = load_or_die('templates', 'index.htmpl')
-    year, season = data['main']['Current Show'].split('/')
+    year, season = template_data.data['main']['Current Show'].split('/')
 
     graphic = shows.get_show_graphic(year, season)
 
     current_show_data = load_or_die('site', year, season, 'show.yaml')
     current_show_data.update({'year': year, 'season': season, 'graphic': graphic})
 
-    index_parser = deepcopy(parser)
-    index_parser.data['show'] = current_show_data
+    index_data = deepcopy(template_data)
+    index_data.bind('show', current_show_data)
 
-    rendered = index_parser.evaluate(index_template)
-    write(index_parser, 'MIT Musical Theatre Guild', rendered, 'site', 'index.html')
+    rendered = evaluate_template(index_template, index_data)
+    write(index_data, 'MIT Musical Theatre Guild', rendered, 'site', 'index.html')
 
 
-def render_directions(parser):
+def render_directions(template_data):
     directions_template = load_or_die('templates', 'directions.htmpl')
-    rendered = parser.evaluate(directions_template)
-    write(parser, 'MTG - Directions', rendered, 'site', 'directions.html')
+    rendered = evaluate_template(directions_template, template_data)
+    write(template_data, 'MTG - Directions', rendered, 'site', 'directions.html')
 
 
-def render_faq(parser):
+def render_faq(template_data):
     faq_template = load_or_die('templates', 'faq.htmpl')
-    rendered = parser.evaluate(faq_template)
-    write(parser, 'MTG - Frequently Asked Questions', rendered, 'site', 'faq.html')
+    rendered = evaluate_template(faq_template, template_data)
+    write(template_data, 'MTG - Frequently Asked Questions', rendered, 'site', 'faq.html')
 
 
-def render_contact(parser):
+def render_contact(template_data):
     contact_template = load_or_die('templates', 'contact.htmpl')
-    rendered = parser.evaluate(contact_template)
-    write(parser, 'MTG - Contact Us', rendered, 'site', 'contact.html')
+    rendered = evaluate_template(contact_template, template_data)
+    write(template_data, 'MTG - Contact Us', rendered, 'site', 'contact.html')
 
 
 def print_usage():
