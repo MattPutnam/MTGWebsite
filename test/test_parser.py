@@ -1,10 +1,12 @@
 import unittest
-from src.parser.parser import Parser
+
+from parser import TemplateData, compile_template
 
 
 def test(self, template, expected, data={}, path=[]):
-    parser = Parser(data, '', path)
-    rendered = parser.evaluate(template)
+    template_data = TemplateData(data, '', path)
+    compiled = compile_template(template)
+    rendered = compiled.evaluate(template_data)
     self.assertEqual(expected, rendered)
 
 
