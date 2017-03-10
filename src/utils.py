@@ -1,10 +1,9 @@
 from fnmatch import fnmatch
 from os import path, listdir
 
-from parser import compile_template
-
 import yaml
 
+from parser import compile_template
 
 root = path.dirname(path.dirname(path.abspath(__file__)))
 
