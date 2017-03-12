@@ -6,7 +6,7 @@ http://mattputnam.org/MTGWebsite/site
 
 _(disclaimer: may not be synced with this repo at any given time)_
 
-Driven by a custom template system written in Python.  Here's how you do common tasks (note that there's an implicit
+Driven by a [custom template system](https://github.com/MattPutnam/htmpl) written in Python.  Here's how you do common tasks (note that there's an implicit
 "run `make.py`" at the end of each):
 
 ##### Selection happened, new future shows need a placeholder page
@@ -76,5 +76,7 @@ Todos:
 
 # Technical notes
 
-The parser uses [mistune](https://github.com/lepture/mistune) for Markdown rendering.
-The site uses PyYAML (included in Python3) to parse yaml files.
+Dependencies:
+
+* PyYAML (included in Python 3 I think?)
+* htmpl (https://github.com/MattPutnam/htmpl)
