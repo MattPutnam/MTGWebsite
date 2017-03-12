@@ -6,7 +6,7 @@ from copy import deepcopy
 import yaml
 
 import shows
-from parser import TemplateData, evaluate_template
+from htmpl import TemplateData, evaluate_template
 from utils import load_or_die, write, root
 
 # Setup yaml importer to use OrderedDict

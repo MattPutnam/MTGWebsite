@@ -3,7 +3,7 @@ from os import path, listdir
 
 import yaml
 
-from parser import compile_template
+from htmpl import compile_template
 
 root = path.dirname(path.dirname(path.abspath(__file__)))
 

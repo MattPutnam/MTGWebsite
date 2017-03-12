@@ -3,7 +3,7 @@ from copy import deepcopy
 from os import listdir, path
 
 import utils
-from parser import compile_template
+from htmpl import compile_template
 from utils import load_or_die, write
 
 compiled_show_template = compile_template(load_or_die('templates', 'show.htmpl'))
